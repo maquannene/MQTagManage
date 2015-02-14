@@ -15,6 +15,7 @@
 		D42A64461A8F213900DD9805 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D42A64441A8F213900DD9805 /* LaunchScreen.xib */; };
 		D42A64521A8F213900DD9805 /* TagManageDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64511A8F213900DD9805 /* TagManageDemoTests.m */; };
 		D42A64621A8F226300DD9805 /* TagManageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64611A8F226300DD9805 /* TagManageScrollView.m */; };
+		D42A64651A8F309000DD9805 /* TagManage.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64641A8F309000DD9805 /* TagManage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		D42A64511A8F213900DD9805 /* TagManageDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagManageDemoTests.m; sourceTree = "<group>"; };
 		D42A64601A8F226300DD9805 /* TagManageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagManageScrollView.h; sourceTree = "<group>"; };
 		D42A64611A8F226300DD9805 /* TagManageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagManageScrollView.m; sourceTree = "<group>"; };
+		D42A64631A8F309000DD9805 /* TagManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagManage.h; sourceTree = "<group>"; };
+		D42A64641A8F309000DD9805 /* TagManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagManage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +92,8 @@
 				D42A643A1A8F213900DD9805 /* AppDelegate.m */,
 				D42A643C1A8F213900DD9805 /* ViewController.h */,
 				D42A643D1A8F213900DD9805 /* ViewController.m */,
+				D42A64631A8F309000DD9805 /* TagManage.h */,
+				D42A64641A8F309000DD9805 /* TagManage.m */,
 				D42A643F1A8F213900DD9805 /* Main.storyboard */,
 				D42A64421A8F213900DD9805 /* Images.xcassets */,
 				D42A64441A8F213900DD9805 /* LaunchScreen.xib */,
@@ -232,6 +237,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D42A64651A8F309000DD9805 /* TagManage.m in Sources */,
 				D42A643E1A8F213900DD9805 /* ViewController.m in Sources */,
 				D42A643B1A8F213900DD9805 /* AppDelegate.m in Sources */,
 				D42A64621A8F226300DD9805 /* TagManageScrollView.m in Sources */,

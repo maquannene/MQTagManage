@@ -11,7 +11,6 @@
 @interface TagManageScrollView()
 
 @property (nonatomic, retain) NSMutableArray *tagItemsArray;
-//@property (nonatomic, assign) BOOL isMoveToEnd;
 
 @end
 
@@ -400,7 +399,6 @@
             else {
                 self.contentOffset = CGPointMake(self.contentSize.width - self.frame.size.width,
                                                  oldContentOffset.y);
-//                _isMoveToEnd = YES;
             }
         }
         else {
@@ -413,16 +411,6 @@
         {
             complete();
         }
-        
-        //  不同长度的处理，这里太挫了
-//        if (_isMoveToEnd)
-//        {
-//            if (self.contentOffset.x + self.assistView.frame.size.width <= self.contentSize.width - self.frame.size.width) {
-//                self.contentOffset = CGPointMake(self.contentOffset.x + self.assistView.frame.size.width,
-//                                                 self.contentOffset.y);
-//            }
-//            _isMoveToEnd = NO;
-//        }
     }];
 }
 
