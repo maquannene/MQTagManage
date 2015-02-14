@@ -14,6 +14,7 @@
 		D42A64431A8F213900DD9805 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D42A64421A8F213900DD9805 /* Images.xcassets */; };
 		D42A64461A8F213900DD9805 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D42A64441A8F213900DD9805 /* LaunchScreen.xib */; };
 		D42A64521A8F213900DD9805 /* TagManageDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64511A8F213900DD9805 /* TagManageDemoTests.m */; };
+		D42A64621A8F226300DD9805 /* TagManageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64611A8F226300DD9805 /* TagManageScrollView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		D42A644B1A8F213900DD9805 /* TagManageDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TagManageDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D42A64501A8F213900DD9805 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D42A64511A8F213900DD9805 /* TagManageDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagManageDemoTests.m; sourceTree = "<group>"; };
+		D42A64601A8F226300DD9805 /* TagManageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagManageScrollView.h; sourceTree = "<group>"; };
+		D42A64611A8F226300DD9805 /* TagManageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagManageScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,7 @@
 		D42A64341A8F213900DD9805 /* TagManageDemo */ = {
 			isa = PBXGroup;
 			children = (
+				D42A645F1A8F225200DD9805 /* TagManage */,
 				D42A64391A8F213900DD9805 /* AppDelegate.h */,
 				D42A643A1A8F213900DD9805 /* AppDelegate.m */,
 				D42A643C1A8F213900DD9805 /* ViewController.h */,
@@ -117,6 +121,15 @@
 				D42A64501A8F213900DD9805 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D42A645F1A8F225200DD9805 /* TagManage */ = {
+			isa = PBXGroup;
+			children = (
+				D42A64601A8F226300DD9805 /* TagManageScrollView.h */,
+				D42A64611A8F226300DD9805 /* TagManageScrollView.m */,
+			);
+			path = TagManage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,6 +234,7 @@
 			files = (
 				D42A643E1A8F213900DD9805 /* ViewController.m in Sources */,
 				D42A643B1A8F213900DD9805 /* AppDelegate.m in Sources */,
+				D42A64621A8F226300DD9805 /* TagManageScrollView.m in Sources */,
 				D42A64381A8F213900DD9805 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,7 +284,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -312,7 +326,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
