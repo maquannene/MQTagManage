@@ -15,13 +15,13 @@
 @required
 - (NSInteger)numberOfVisiableTags;
 
+- (NSInteger)getActiveTagIndex;
+
 - (UIView *)tagItemAtIndex:(NSInteger)index;
 
 - (CGFloat)tagManage:(TagManageScrollView *)tagManage heightForTagItemAtIndex:(NSInteger)index;
 
 - (CGFloat)tagManage:(TagManageScrollView *)tagManage widthForTagItemAtIndex:(NSInteger)index;
-
-- (NSInteger)getActiveTagIndex;
 
 @end
 
