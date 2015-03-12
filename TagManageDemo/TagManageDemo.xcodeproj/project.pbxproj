@@ -14,7 +14,7 @@
 		D42A64431A8F213900DD9805 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D42A64421A8F213900DD9805 /* Images.xcassets */; };
 		D42A64461A8F213900DD9805 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D42A64441A8F213900DD9805 /* LaunchScreen.xib */; };
 		D42A64521A8F213900DD9805 /* TagManageDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64511A8F213900DD9805 /* TagManageDemoTests.m */; };
-		D42A64621A8F226300DD9805 /* TagManageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64611A8F226300DD9805 /* TagManageScrollView.m */; };
+		D42A64621A8F226300DD9805 /* TagManageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64611A8F226300DD9805 /* TagManageView.m */; };
 		D42A64651A8F309000DD9805 /* TagManage.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64641A8F309000DD9805 /* TagManage.m */; };
 /* End PBXBuildFile section */
 
@@ -42,8 +42,8 @@
 		D42A644B1A8F213900DD9805 /* TagManageDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TagManageDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D42A64501A8F213900DD9805 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D42A64511A8F213900DD9805 /* TagManageDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagManageDemoTests.m; sourceTree = "<group>"; };
-		D42A64601A8F226300DD9805 /* TagManageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagManageScrollView.h; sourceTree = "<group>"; };
-		D42A64611A8F226300DD9805 /* TagManageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagManageScrollView.m; sourceTree = "<group>"; };
+		D42A64601A8F226300DD9805 /* TagManageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagManageView.h; sourceTree = "<group>"; };
+		D42A64611A8F226300DD9805 /* TagManageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagManageView.m; sourceTree = "<group>"; };
 		D42A64631A8F309000DD9805 /* TagManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TagManage.h; path = TagManageDemo/TagManage.h; sourceTree = SOURCE_ROOT; };
 		D42A64641A8F309000DD9805 /* TagManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TagManage.m; path = TagManageDemo/TagManage.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -131,8 +131,8 @@
 			children = (
 				D42A64631A8F309000DD9805 /* TagManage.h */,
 				D42A64641A8F309000DD9805 /* TagManage.m */,
-				D42A64601A8F226300DD9805 /* TagManageScrollView.h */,
-				D42A64611A8F226300DD9805 /* TagManageScrollView.m */,
+				D42A64601A8F226300DD9805 /* TagManageView.h */,
+				D42A64611A8F226300DD9805 /* TagManageView.m */,
 			);
 			path = TagManage;
 			sourceTree = "<group>";
@@ -240,7 +240,7 @@
 				D42A64651A8F309000DD9805 /* TagManage.m in Sources */,
 				D42A643E1A8F213900DD9805 /* ViewController.m in Sources */,
 				D42A643B1A8F213900DD9805 /* AppDelegate.m in Sources */,
-				D42A64621A8F226300DD9805 /* TagManageScrollView.m in Sources */,
+				D42A64621A8F226300DD9805 /* TagManageView.m in Sources */,
 				D42A64381A8F213900DD9805 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -434,6 +434,7 @@
 				D42A64571A8F213900DD9805 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D42A64581A8F213900DD9805 /* Build configuration list for PBXNativeTarget "TagManageDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -442,6 +443,7 @@
 				D42A645A1A8F213900DD9805 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -7,7 +7,7 @@
 //
 
 #import "TagManage.h"
-#import "TagManageScrollView.h"
+#import "TagManageView.h"
 
 typedef NS_ENUM(NSUInteger, TagManageAutoScrollDir) {
     TagManageAutoScrollLeft,
@@ -18,13 +18,13 @@ typedef NS_ENUM(NSUInteger, TagManageAutoScrollDir) {
 @interface TagManage()
 
 <
-TagManageScrollViewDataSource,
-TagManageScrollViewDelegate,
+TagManageViewDelegate,
+TagManageViewDataSource,
 UIGestureRecognizerDelegate
 >
 
 {
-    TagManageScrollView *mTagManageScrollView;
+    TagManageView *mTagManageView;
     NSInteger currentActiveIndex;
     NSInteger totalOfTag;
     
@@ -41,11 +41,11 @@ UIGestureRecognizerDelegate
 
 @implementation TagManage
 
-@synthesize view = mTagManageScrollView;
+@synthesize view = mTagManageView;
 
 - (void)dealloc {
-    [mTagManageScrollView release];
-    mTagManageScrollView = nil;
+    [mTagManageView release];
+    mTagManageView = nil;
     [_mTempMoveTag release];
     _mTempMoveTag = nil;
     [_autoMoveTimeer release];
@@ -61,35 +61,35 @@ UIGestureRecognizerDelegate
         totalOfTag = 10;
         [self createTagManangeView];
         [self createTagManangeViewAssistView];
-        [mTagManageScrollView reloadTagItems];
+        [mTagManageView reloadTagItems];
     }
     return self;
 }
 
 - (void)createTagManangeView {
-    mTagManageScrollView = [[TagManageScrollView alloc] initWithFrame:CGRectZero];
-    mTagManageScrollView.backgroundColor = [UIColor orangeColor];
-    mTagManageScrollView.delegate = self;
-    mTagManageScrollView.dataSource = self;
-    mTagManageScrollView.gap = -25;                 //  设置间隔。负数为重叠。
+    mTagManageView = [[TagManageView alloc] initWithFrame:CGRectZero];
+    mTagManageView.backgroundColor = [UIColor orangeColor];
+    mTagManageView.delegate = self;
+    mTagManageView.dataSource = self;
+    mTagManageView.gap = -25;                 //  设置间隔。负数为重叠。
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                  action:@selector(tagManageScrollViewTap:)];
     tapGesture.delegate = self;
     tapGesture.numberOfTapsRequired = 1;
-    [mTagManageScrollView addGestureRecognizer:tapGesture];
+    [mTagManageView addGestureRecognizer:tapGesture];
     [tapGesture release];
     
     UITapGestureRecognizer *doubleGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                     action:@selector(tagManageScrollViewTap:)];
     doubleGesture.delegate = self;
     doubleGesture.numberOfTapsRequired = 2;
-    [mTagManageScrollView addGestureRecognizer:doubleGesture];
+    [mTagManageView addGestureRecognizer:doubleGesture];
     [doubleGesture release];
     
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tagManageScrollViewLongPress:)];
-    [mTagManageScrollView addGestureRecognizer:longPress];
+    [mTagManageView addGestureRecognizer:longPress];
     [longPress release];
 }
 
@@ -99,7 +99,7 @@ UIGestureRecognizerDelegate
     [addButton addTarget:self
                   action:@selector(tagManageAssistViewAction:)
         forControlEvents:UIControlEventTouchUpInside];
-    mTagManageScrollView.assistView = addButton;
+    mTagManageView.assistView = addButton;
 }
 
 #pragma mark -
@@ -107,11 +107,11 @@ UIGestureRecognizerDelegate
 - (void)deleteTag:(NSInteger)index {
     NSLog(@"delete index = %d", currentActiveIndex);
     totalOfTag --;
-    [mTagManageScrollView deleteTagItemAtIndex:currentActiveIndex complete:^{
+    [mTagManageView deleteTagItemAtIndex:currentActiveIndex complete:^{
         if (currentActiveIndex == totalOfTag) {
             currentActiveIndex = currentActiveIndex - 1;
         }
-        [mTagManageScrollView reloadTagItems];
+        [mTagManageView reloadTagItems];
         NSLog(@"active index = %d", currentActiveIndex);
     }];
 }
@@ -119,7 +119,7 @@ UIGestureRecognizerDelegate
 - (void)resetTag {
     totalOfTag = 10;
     currentActiveIndex = 0;
-    [mTagManageScrollView reloadTagItems];
+    [mTagManageView reloadTagItems];
 }
 
 #pragma mark -
@@ -143,11 +143,11 @@ UIGestureRecognizerDelegate
     switch (autoScrollDir)
     {
         case TagManageAutoScrollRight:
-            if (mTagManageScrollView.contentOffset.x > 0)
+            if (mTagManageView.contentOffset.x > 0)
             {
-                // 自动滚动，mTagManageScrollView的偏移量每次调整1，但是长按的临时产生的_mTempMoveTag要回调1
-                mTagManageScrollView.contentOffset = CGPointMake(mTagManageScrollView.contentOffset.x - 1,
-                                                                 mTagManageScrollView.contentOffset.y);
+                // 自动滚动，mTagManageView的偏移量每次调整1，但是长按的临时产生的_mTempMoveTag要回调1
+                mTagManageView.contentOffset = CGPointMake(mTagManageView.contentOffset.x - 1,
+                                                           mTagManageView.contentOffset.y);
                 _mTempMoveTag.center = CGPointMake(_mTempMoveTag.center.x - 1,
                                                    _mTempMoveTag.center.y);
                 [self exchangeIfNeeded];
@@ -155,10 +155,10 @@ UIGestureRecognizerDelegate
             break;
         case TagManageAutoScrollLeft:
             
-            if (mTagManageScrollView.contentOffset.x < mTagManageScrollView.contentSize.width - mTagManageScrollView.frame.size.width)
+            if (mTagManageView.contentOffset.x < mTagManageView.contentSize.width - mTagManageView.frame.size.width)
             {
-                mTagManageScrollView.contentOffset = CGPointMake(mTagManageScrollView.contentOffset.x + 1,
-                                                                 mTagManageScrollView.contentOffset.y);
+                mTagManageView.contentOffset = CGPointMake(mTagManageView.contentOffset.x + 1,
+                                                                 mTagManageView.contentOffset.y);
                 _mTempMoveTag.center = CGPointMake(_mTempMoveTag.center.x + 1,
                                                    _mTempMoveTag.center.y);
                 [self exchangeIfNeeded];
@@ -177,9 +177,9 @@ UIGestureRecognizerDelegate
 - (void)tagManageAssistViewAction:(UIButton *)button {
     //  add total first
     totalOfTag ++;
-    [mTagManageScrollView insertTagItemAtIndex:(totalOfTag - 1) complete:^{
+    [mTagManageView insertTagItemAtIndex:(totalOfTag - 1) complete:^{
         currentActiveIndex = (totalOfTag - 1);
-        [mTagManageScrollView reloadTagItems];
+        [mTagManageView reloadTagItems];
     }];
 }
 
@@ -187,12 +187,12 @@ UIGestureRecognizerDelegate
 #pragma mark - GestureAction
 - (void)tagManageScrollViewTap:(UITapGestureRecognizer *)gesture {
     
-    NSInteger tapIndex = [mTagManageScrollView findTagItemIndex:[gesture locationInView:mTagManageScrollView]];
+    NSInteger tapIndex = [mTagManageView indexOfItemAtPoint:[gesture locationInView:mTagManageView]];
     NSLog(@"tap index = %d", tapIndex);
     //  单机
     if (gesture.numberOfTapsRequired == 1) {
         currentActiveIndex = tapIndex;
-        [mTagManageScrollView reloadTagItems];
+        [mTagManageView reloadTagItems];
     }
     //  双击
     if (gesture.numberOfTapsRequired == 2) {
@@ -202,15 +202,15 @@ UIGestureRecognizerDelegate
 
 - (void)tagManageScrollViewLongPress:(UILongPressGestureRecognizer *)gesture {
     
-    CGPoint touchPoint = [gesture locationInView:mTagManageScrollView];
+    CGPoint touchPoint = [gesture locationInView:mTagManageView];
     
     if (gesture.state == UIGestureRecognizerStateBegan) {
         
         //  记录长按起始位置
-        NSInteger longPressIndex = [mTagManageScrollView findTagItemIndex:touchPoint];
+        NSInteger longPressIndex = [mTagManageView indexOfItemAtPoint:touchPoint];
         
         //  如果没有点击到tag,或者点击超范围 容错处理。
-        if (longPressTag < 0 || touchPoint.x > mTagManageScrollView.contentSize.width) {
+        if (longPressTag < 0 || touchPoint.x > mTagManageView.contentSize.width) {
             return;
         }
         
@@ -218,12 +218,12 @@ UIGestureRecognizerDelegate
         moveFromIndex = longPressIndex;
     
 
-        longPressTag = [mTagManageScrollView tagItemAtIndex:longPressIndex];
+        longPressTag = [mTagManageView tagForItemAtIndex:longPressIndex];
         //  显示临时view 跟着手指移动
         self.mTempMoveTag = [[[UIImageView alloc] initWithFrame:longPressTag.frame] autorelease];
         _mTempMoveTag.image = [self imageFromItem:longPressTag];
         _mTempMoveTag.alpha = .8;
-        [mTagManageScrollView addSubview:_mTempMoveTag];
+        [mTagManageView addSubview:_mTempMoveTag];
         //  长按的tag要隐藏
         longPressTag.hidden = YES;
         
@@ -233,7 +233,7 @@ UIGestureRecognizerDelegate
     if (gesture.state == UIGestureRecognizerStateChanged) {
         
         //  容错处理
-        if (touchPoint.x > mTagManageScrollView.contentSize.width) {
+        if (touchPoint.x > mTagManageView.contentSize.width) {
             return;
         }
         
@@ -243,14 +243,14 @@ UIGestureRecognizerDelegate
         
         // 自动滚动判断
         //如果触及左边自动滚动区
-        if (touchPoint.x - mTagManageScrollView.contentOffset.x <= 50 &&
-            touchPoint.x - mTagManageScrollView.contentOffset.x >= 0)
+        if (touchPoint.x - mTagManageView.contentOffset.x <= 50 &&
+            touchPoint.x - mTagManageView.contentOffset.x >= 0)
         {
             autoScrollDir = TagManageAutoScrollRight;
         }
         //如果触及右边自动滚动区
-        else if (touchPoint.x - mTagManageScrollView.contentOffset.x >= mTagManageScrollView.frame.size.width - 50 &&
-                 touchPoint.x - mTagManageScrollView.contentOffset.x <= mTagManageScrollView.frame.size.width)
+        else if (touchPoint.x - mTagManageView.contentOffset.x >= mTagManageView.frame.size.width - 50 &&
+                 touchPoint.x - mTagManageView.contentOffset.x <= mTagManageView.frame.size.width)
         {
             autoScrollDir = TagManageAutoScrollLeft;
         }
@@ -276,7 +276,7 @@ UIGestureRecognizerDelegate
             
             //  如果起始位置，和最后长按移动到的位置不一致，要更新tag
             if (moveFromIndex != currentLongPressIndex) {
-                [mTagManageScrollView reloadTagItems];
+                [mTagManageView reloadTagItems];
             }
         }];
         
@@ -285,11 +285,11 @@ UIGestureRecognizerDelegate
 }
 
 - (void)exchangeIfNeeded {
-    NSInteger toIndex = [mTagManageScrollView findTagItemIndex:CGPointMake(_mTempMoveTag.center.x, _mTempMoveTag.center.y)];
+    NSInteger toIndex = [mTagManageView indexOfItemAtPoint:CGPointMake(_mTempMoveTag.center.x, _mTempMoveTag.center.y)];
     if (toIndex < 0) {
         return;
     }
-    CGRect toTagRect = [mTagManageScrollView getTagItemRect:toIndex];
+    CGRect toTagRect = [mTagManageView rectOfItemAtIndex:toIndex];
     
     if (toIndex > currentLongPressIndex && CGRectGetMidX(_mTempMoveTag.frame) < CGRectGetMidX(toTagRect)) {
         toIndex --;
@@ -307,7 +307,7 @@ UIGestureRecognizerDelegate
         }
     }
     
-    [mTagManageScrollView moveTagItemAtIndex:currentLongPressIndex toIndex:toIndex complete:nil];
+    [mTagManageView moveTagItemAtIndex:currentLongPressIndex toIndex:toIndex complete:nil];
     
     currentLongPressIndex = toIndex;
 }
@@ -323,11 +323,11 @@ UIGestureRecognizerDelegate
 
 #pragma mark -
 #pragma mark - TagManageScrollViewDataSource
-- (NSInteger)numberOfVisiableTags {
+- (NSInteger)numberOfItems:(TagManageView *)tagManageView {
     return totalOfTag;
 }
 
-- (UIView *)tagItemAtIndex:(NSInteger)index {
+- (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index {
     UILabel *tagItem = [[[UILabel alloc] init] autorelease];
     tagItem.backgroundColor = [UIColor grayColor];
     tagItem.text = [NSString stringWithFormat:@"%d", index];
@@ -338,15 +338,15 @@ UIGestureRecognizerDelegate
     return tagItem;
 }
 
-- (CGFloat)tagManage:(TagManageScrollView *)tagManage heightForTagItemAtIndex:(NSInteger)index {
+- (CGFloat)tagManageView:(TagManageView *)tagManageView heightForTagItemAtIndex:(NSInteger)index {
     return 44;
 }
 
-- (CGFloat)tagManage:(TagManageScrollView *)tagManage widthForTagItemAtIndex:(NSInteger)index {
+- (CGFloat)tagManageView:(TagManageView *)tagManageView widthForTagItemAtIndex:(NSInteger)index {
     return 135;
 }
 
-- (NSInteger)getActiveTagIndex {
+- (NSInteger)activeTagIndex:(TagManageView *)tagManageView {
     return currentActiveIndex;
 }
 

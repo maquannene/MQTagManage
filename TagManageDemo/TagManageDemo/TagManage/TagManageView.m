@@ -1,20 +1,20 @@
 //
-//  TagManageScrollView.m
+//  TagManageView.m
 //  TagManageDemo
 //
 //  Created by 马权 on 2/14/15.
 //  Copyright (c) 2015 maquan. All rights reserved.
 //
 
-#import "TagManageScrollView.h"
+#import "TagManageView.h"
 
-@interface TagManageScrollView()
+@interface TagManageView()
 
 @property (nonatomic, retain) NSMutableArray *tagItemsArray;
 
 @end
 
-@implementation TagManageScrollView
+@implementation TagManageView
 
 - (void)dealloc {
     [_tagItemsArray release];
@@ -53,8 +53,8 @@
  *  @return topIndex
  */
 - (NSInteger)topIndex {
-    if ([self.dataSource respondsToSelector:@selector(getActiveTagIndex)]) {
-        return [self.dataSource getActiveTagIndex];
+    if ([self.dataSource respondsToSelector:@selector(activeTagIndex:)]) {
+        return [self.dataSource activeTagIndex:self];
     }
     return 0;
 }
@@ -66,7 +66,7 @@
  */
 - (void)updateAssistViewFrame {
     if (_assistView) {
-        NSInteger number = [self.dataSource numberOfVisiableTags];
+        NSInteger number = [self.dataSource numberOfItems:self];
         UIView *lastTagItem = _tagItemsArray[number - 1];
         _assistView.frame = CGRectMake(CGRectGetMaxX(lastTagItem.frame),
                                        0,
@@ -104,17 +104,17 @@
 
 - (CGFloat)getTagItemWidth:(NSInteger)index
 {
-    if ([_dataSource respondsToSelector:@selector(tagManage:widthForTagItemAtIndex:)]) {
-        return [_dataSource tagManage:self widthForTagItemAtIndex:index];
+    if ([_dataSource respondsToSelector:@selector(tagManageView:widthForTagItemAtIndex:)]) {
+        return [_dataSource tagManageView:self widthForTagItemAtIndex:index];
     }
     return 0;
 }
 
 - (CGFloat)getTagItemHeigh:(NSInteger)index
 {
-    if ([_dataSource respondsToSelector:@selector(tagManage:heightForTagItemAtIndex:)])
+    if ([_dataSource respondsToSelector:@selector(tagManageView:heightForTagItemAtIndex:)])
     {
-        return [_dataSource tagManage:self heightForTagItemAtIndex:index];
+        return [_dataSource tagManageView:self heightForTagItemAtIndex:index];
     }
     return 0;
 }
@@ -131,9 +131,9 @@
     }
     
     //  重新加入每个sheetItem
-    NSInteger number = [self.dataSource numberOfVisiableTags];
+    NSInteger number = [self.dataSource numberOfItems:self];
     for (NSInteger index = 0; index < number; index++) {
-        UIView *item = [self.dataSource tagItemAtIndex:index];
+        UIView *item = [self.dataSource tagManageView:self tagForItemAtIndex:index];
         item.frame = CGRectMake([self getTagItemOriginX:index], 0, [self getTagItemWidth:index], [self getTagItemHeigh:index]);
         [_tagItemsArray addObject:item];
         [self addSubview:item];
@@ -169,18 +169,18 @@
     }
 }
 
-- (NSInteger)findTagItemIndex:(CGPoint )point
+- (NSInteger)indexOfItemAtPoint:(CGPoint)point
 {
     for (NSInteger index = self.topIndex; index >= 0; index -- ) {
-        CGRect frame = [self getTagItemRect:index];
+        CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
             return index;
         }
     }
     
-    for (NSInteger index = [self topIndex] + 1; index < [self.dataSource numberOfVisiableTags]; index ++)
+    for (NSInteger index = [self topIndex] + 1; index < [self.dataSource numberOfItems:self]; index ++)
     {
-        CGRect frame = [self getTagItemRect:index];
+        CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
             return index;
         }
@@ -189,17 +189,16 @@
     return -1;
 }
 
-- (UIView *)findTagItem:(CGPoint)point
-{
+- (UIView *)tagForItemAtPoint:(CGPoint)point {
     for (NSInteger index = self.topIndex; index >= 0; index -- ) {
-        CGRect frame = [self getTagItemRect:index];
+        CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
             return (UIView *)_tagItemsArray[index];
         }
     }
     
-    for (NSInteger index = self.topIndex + 1; index < [self.dataSource numberOfVisiableTags]; index ++) {
-        CGRect frame = [self getTagItemRect:index];
+    for (NSInteger index = self.topIndex + 1; index < [self.dataSource numberOfItems:self]; index ++) {
+        CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
             return (UIView *)_tagItemsArray[index];
         }
@@ -208,17 +207,15 @@
     return nil;
 }
 
-- (CGRect)getTagItemRect:(NSInteger)index
-{
+- (CGRect)rectOfItemAtIndex:(NSInteger)index {
     return  CGRectMake([self getTagItemOriginX:index],
                        0,
                        [self getTagItemWidth:index],
                        [self getTagItemHeigh:index]);
 }
 
-- (UIView *)tagItemAtIndex:(NSInteger)index
-{
-    return _tagItemsArray[index];
+- (UIView *)tagForItemAtIndex:(NSInteger)index {
+    return [self.dataSource tagManageView:self tagForItemAtIndex:index];
 }
 
 - (void)moveTagItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^)())complete{
@@ -273,7 +270,7 @@
     CGPoint oldContentOffset = self.contentOffset;
     
     //  根据数据，创建一个临时的insertTagItem
-    UIView *insertTagItem = [_dataSource tagItemAtIndex:index];
+    UIView *insertTagItem = [_dataSource tagManageView:self tagForItemAtIndex:index];
     
     //  通过新增位置的前一个item计算出新增insertSheetItem 出现的位置
     insertTagItem.frame = CGRectMake([self getTagItemOriginX:index],
@@ -281,7 +278,7 @@
                                      [self getTagItemWidth:index],
                                      [self getTagItemHeigh:index]);
     
-    insertTagItem.transform = CGAffineTransformMakeScale(0.2, 0.2);
+    insertTagItem.transform = CGAffineTransformMakeScale(0.01, 1);
     insertTagItem.alpha = 0;
     [self addSubview:insertTagItem];
     [self bringSubviewToFront:insertTagItem];
@@ -306,7 +303,7 @@
         //  所以只要计算最后一个item的 x 加上 宽度即可
         if (self.assistView)
         {
-            self.assistView.frame = CGRectMake([self getTagItemOriginX:[self.dataSource numberOfVisiableTags] - 1] + [self getTagItemWidth:[self.dataSource numberOfVisiableTags] - 1],
+            self.assistView.frame = CGRectMake([self getTagItemOriginX:[self.dataSource numberOfItems:self] - 1] + [self getTagItemWidth:[self.dataSource numberOfItems:self] - 1],
                                                0,
                                                CGRectGetWidth(_assistView.frame),
                                                CGRectGetHeight(_assistView.frame));
@@ -372,14 +369,14 @@
         //  所以只要计算最后一个item的 x 加上 宽度即可
         if (self.assistView) {
             
-            if (index != [self.dataSource numberOfVisiableTags]) {
+            if (index != [self.dataSource numberOfItems:self]) {
                 _assistView.frame = CGRectMake(CGRectGetMaxX(lastTagItem.frame),
                                                0,
                                                CGRectGetWidth(_assistView.frame),
                                                CGRectGetWidth(_assistView.frame));
             }
             else {
-                _assistView.frame = CGRectMake([self getTagItemOriginX:[self.dataSource numberOfVisiableTags] - 1] + [self getTagItemWidth:[self.dataSource numberOfVisiableTags] - 1],
+                _assistView.frame = CGRectMake([self getTagItemOriginX:[self.dataSource numberOfItems:self] - 1] + [self getTagItemWidth:[self.dataSource numberOfItems:self] - 1],
                                                0,
                                                CGRectGetWidth(_assistView.frame),
                                                CGRectGetHeight(_assistView.frame));
@@ -388,7 +385,7 @@
         
         //  设置deleteSheetItem 消失的形态
         deleteTagItem.alpha = 0;
-        deleteTagItem.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        deleteTagItem.transform = CGAffineTransformMakeScale(0.01, 1);
         
         //  调整scrollview 的最终offset
         if (self.contentSize.width - self.frame.size.width > 0) {
