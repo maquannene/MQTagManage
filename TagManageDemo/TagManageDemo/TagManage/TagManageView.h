@@ -14,15 +14,15 @@
 
 @required
 
-- (NSInteger)activeTagIndex:(TagManageView *)tagManageView;
+- (NSInteger)activeItemIndex:(TagManageView *)tagManageView;
 
 - (NSInteger)numberOfItems:(TagManageView *)tagManageView;
 
 - (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index;
 
-- (CGFloat)tagManageView:(TagManageView *)tagManageView heightForTagItemAtIndex:(NSInteger)index;
+- (CGFloat)tagManageView:(TagManageView *)tagManageView heightForItemAtIndex:(NSInteger)index;
 
-- (CGFloat)tagManageView:(TagManageView *)tagManageView widthForTagItemAtIndex:(NSInteger)index;
+- (CGFloat)tagManageView:(TagManageView *)tagManageView widthForItemAtIndex:(NSInteger)index;
 
 @end
 
@@ -34,20 +34,20 @@
 
 @property (nonatomic, assign) id<TagManageViewDataSource> dataSource;
 @property (nonatomic, assign) id<TagManageViewDelegate> delegate;
-@property (nonatomic, retain) UIView *assistView;                                       //  辅助view。 可以自己定制功能。
-@property (nonatomic, assign) NSInteger gap;                                            //  每个tagItem之间的间隔。 可以支持负数值叠加。
+@property (nonatomic, retain) UIView *assistView;                       //  assistView behind of last tagItem
+@property (nonatomic, assign) NSInteger gap;                            //  gap of between tagItem
 
 - (void)reloadTagItems;
-- (void)autoAdjustZIndex;
+- (void)autoAdjustZCoordinate;
 
 - (CGRect)rectOfItemAtIndex:(NSInteger)index;
 - (NSInteger)indexOfItemAtPoint:(CGPoint)point;
 - (UIView *)tagForItemAtPoint:(CGPoint)point;
 - (UIView *)tagForItemAtIndex:(NSInteger)index;
 
-/*插入，删除（隐藏），移动*/
-- (void)insertTagItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
-- (void)deleteTagItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
-- (void)moveTagItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^) ())complete;
+/*insert, delete（hide, move*/
+- (void)insertItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
+- (void)deleteItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
+- (void)moveItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^) ())complete;
 
 @end

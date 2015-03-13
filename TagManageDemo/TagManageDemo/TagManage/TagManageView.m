@@ -11,6 +11,7 @@
 @interface TagManageView()
 
 @property (nonatomic, retain) NSMutableArray *tagItemsArray;
+@property (nonatomic, assign) NSInteger selectedItemIndex;
 
 @end
 
@@ -24,6 +25,15 @@
     [super dealloc];
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.alwaysBounceHorizontal = YES;
+        _tagItemsArray = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -33,11 +43,6 @@
     return self;
 }
 
-/**
- *  assistView的set方法，如果设置assistView，就先移除原有的，再加上来。
- *
- *  @param assistView 传入的assistView
- */
 - (void)setAssistView:(UIView *)assistView {
     if (_assistView != assistView) {
         [_assistView removeFromSuperview];
@@ -47,26 +52,18 @@
     }
 }
 
-/**
- *  获取topIndex,用代理设置，就用代理的值，否则就用属性值
- *
- *  @return topIndex
- */
-- (NSInteger)topIndex {
-    if ([self.dataSource respondsToSelector:@selector(activeTagIndex:)]) {
-        return [self.dataSource activeTagIndex:self];
+- (NSInteger)activeItemIndex {
+    if ([self.dataSource respondsToSelector:@selector(activeItemIndex:)]) {
+        return [self.dataSource activeItemIndex:self];
     }
     return 0;
 }
 
 #pragma mark -
-#pragma mark - 对内方法
-/**
- *  更新assistView的frame
- */
+#pragma mark - privite method
 - (void)updateAssistViewFrame {
     if (_assistView) {
-        NSInteger number = [self.dataSource numberOfItems:self];
+        NSInteger number = _tagItemsArray.count;
         UIView *lastTagItem = _tagItemsArray[number - 1];
         _assistView.frame = CGRectMake(CGRectGetMaxX(lastTagItem.frame),
                                        0,
@@ -75,24 +72,14 @@
     }
 }
 
-/**
- *  清理sheetItem数组
- */
 - (void)cleanTagItemsArray {
     [_tagItemsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         UIView *tagItem = obj;
         [tagItem removeFromSuperview];
-//        tagItem = nil;
     }];
 }
 
-/**
- *  获取每个index 的x
- *
- *  @param index item对应的index
- *
- *  @return x位置
- */
+
 - (CGFloat)getTagItemOriginX:(NSInteger)index
 {
     CGFloat x = 0;
@@ -104,33 +91,33 @@
 
 - (CGFloat)getTagItemWidth:(NSInteger)index
 {
-    if ([_dataSource respondsToSelector:@selector(tagManageView:widthForTagItemAtIndex:)]) {
-        return [_dataSource tagManageView:self widthForTagItemAtIndex:index];
+    if ([_dataSource respondsToSelector:@selector(tagManageView:widthForItemAtIndex:)]) {
+        return [_dataSource tagManageView:self widthForItemAtIndex:index];
     }
     return 0;
 }
 
 - (CGFloat)getTagItemHeigh:(NSInteger)index
 {
-    if ([_dataSource respondsToSelector:@selector(tagManageView:heightForTagItemAtIndex:)])
+    if ([_dataSource respondsToSelector:@selector(tagManageView:heightForItemAtIndex:)])
     {
-        return [_dataSource tagManageView:self heightForTagItemAtIndex:index];
+        return [_dataSource tagManageView:self heightForItemAtIndex:index];
     }
     return 0;
 }
 
 #pragma mark -
-#pragma mark - 对外接口
+#pragma mark - public method
 
 - (void)reloadTagItems {
     
-    //  首先清理原有所有的sheetItems
+    //  first, clean old tagItemsArray
     if (_tagItemsArray.count) {
         [self cleanTagItemsArray];
         [_tagItemsArray removeAllObjects];
     }
     
-    //  重新加入每个sheetItem
+    //  second, add every tagItem by datasource
     NSInteger number = [self.dataSource numberOfItems:self];
     for (NSInteger index = 0; index < number; index++) {
         UIView *item = [self.dataSource tagManageView:self tagForItemAtIndex:index];
@@ -139,16 +126,17 @@
         [self addSubview:item];
     }
     
-    //  更新assistView的frame
-    [self updateAssistViewFrame];
     
+    
+    // adjust contentSize
     self.contentSize = CGSizeMake([self getTagItemOriginX:number - 1] + [self getTagItemWidth:number - 1] + CGRectGetWidth(self.assistView.frame),
                                   CGRectGetHeight(self.frame));
-    //  调整Z坐标
-    [self autoAdjustZIndex];
+    
+    [self updateAssistViewFrame];
+    [self autoAdjustZCoordinate];
 }
 
-- (void)autoAdjustZIndex
+- (void)autoAdjustZCoordinate
 {
     
     [_tagItemsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
@@ -159,11 +147,11 @@
                                    [self getTagItemHeigh:index]);
     }];
     
-    for (NSInteger index = self.topIndex - 1; index >= 0 ; index--) {
+    for (NSInteger index = self.activeItemIndex - 1; index >= 0 ; index--) {
         UIView *tagItem = (UIView *)_tagItemsArray[index];
         [self sendSubviewToBack:tagItem];
     }
-    for (NSInteger index = self.topIndex + 1; index <= _tagItemsArray.count - 1; index++) {
+    for (NSInteger index = self.activeItemIndex + 1; index <= _tagItemsArray.count - 1; index++) {
         UIView *tagItem = (UIView *)_tagItemsArray[index];
         [self sendSubviewToBack:tagItem];
     }
@@ -171,14 +159,14 @@
 
 - (NSInteger)indexOfItemAtPoint:(CGPoint)point
 {
-    for (NSInteger index = self.topIndex; index >= 0; index -- ) {
+    for (NSInteger index = self.activeItemIndex; index >= 0; index -- ) {
         CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
             return index;
         }
     }
     
-    for (NSInteger index = [self topIndex] + 1; index < [self.dataSource numberOfItems:self]; index ++)
+    for (NSInteger index = [self activeItemIndex] + 1; index < _tagItemsArray.count; index ++)
     {
         CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
@@ -190,14 +178,14 @@
 }
 
 - (UIView *)tagForItemAtPoint:(CGPoint)point {
-    for (NSInteger index = self.topIndex; index >= 0; index -- ) {
+    for (NSInteger index = self.activeItemIndex; index >= 0; index -- ) {
         CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
             return (UIView *)_tagItemsArray[index];
         }
     }
     
-    for (NSInteger index = self.topIndex + 1; index < [self.dataSource numberOfItems:self]; index ++) {
+    for (NSInteger index = self.activeItemIndex + 1; index < _tagItemsArray.count; index ++) {
         CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
             return (UIView *)_tagItemsArray[index];
@@ -215,12 +203,12 @@
 }
 
 - (UIView *)tagForItemAtIndex:(NSInteger)index {
-    return [self.dataSource tagManageView:self tagForItemAtIndex:index];
+    return _tagItemsArray[index];
 }
 
-- (void)moveTagItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^)())complete{
+- (void)moveItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^)())complete {
     
-    //  此时，界面items 还是旧的，没有更新。
+    //  this time, tagItemsArray is old dataSource
     UIView *fromTagItem = _tagItemsArray[fromIndex];
     CGRect toRect = CGRectMake([self getTagItemOriginX:toIndex],
                                0,
@@ -231,7 +219,7 @@
         
         fromTagItem.frame = toRect;
         
-        //  前向后移动，大于from 和 小与等于 to 的tagItem x 坐标向前移动fromTagItem.frame.size.width个距离
+        //  move back , the origin.x of tagItem which > from and <= to move forward fromTagItem.frame.size.width
         if (fromIndex < toIndex) {
             for (NSInteger index = fromIndex + 1; index <= toIndex ; index++) {
                 UIView *tagItem = _tagItemsArray[index];
@@ -242,7 +230,7 @@
             }
         }
         
-        // 后向前移动，大于等于to 和 小与 from 的tagItem x 坐标向后移动fromTagItem.frame.size.width个距离
+        //  move forward , the origin.x of tagItem which >= to and < from move back fromTagItem.frame.size.width
         if (fromIndex > toIndex) {
             for (NSInteger index = fromIndex - 1; index >= toIndex; index--) {
                 UIView *tagItem = _tagItemsArray[index];
@@ -265,14 +253,13 @@
     }];
 }
 
-- (void)insertTagItemAtIndex:(NSInteger)index complete:(void (^) ())complete
-{
+- (void)insertItemAtIndex:(NSInteger)index complete:(void (^)())complete {
     CGPoint oldContentOffset = self.contentOffset;
     
-    //  根据数据，创建一个临时的insertTagItem
+    //  create a temp tagItem according to dataSource
     UIView *insertTagItem = [_dataSource tagManageView:self tagForItemAtIndex:index];
     
-    //  通过新增位置的前一个item计算出新增insertSheetItem 出现的位置
+    //  caculate the frame of insertTagItem according to last tagItem
     insertTagItem.frame = CGRectMake([self getTagItemOriginX:index],
                                      0,
                                      [self getTagItemWidth:index],
@@ -283,12 +270,12 @@
     [self addSubview:insertTagItem];
     [self bringSubviewToFront:insertTagItem];
     
-    //设置增加之后的 contentSize
+    //set new contentSize
     self.contentSize = CGSizeMake(self.contentSize.width + ([self getTagItemWidth:index] + self.gap),
                                   self.contentSize.height);
     [UIView animateWithDuration:0.5 animations:^(){
         
-        //  将增加位置之后的每个item 向后移一个新增的位置，宽高 保持
+        //  every tagItem which behind of insertTagItem move back insertTagItem.width
         [_tagItemsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop){
             UIView *tagItem = (UIView *)obj;
             if (i >= index) {
@@ -299,8 +286,7 @@
             }
         }];
         
-        //  这里设置assistView 位置是 数据源已经增加sheetItem后add的位置
-        //  所以只要计算最后一个item的 x 加上 宽度即可
+        //  caculate assistView.frame
         if (self.assistView)
         {
             self.assistView.frame = CGRectMake([self getTagItemOriginX:[self.dataSource numberOfItems:self] - 1] + [self getTagItemWidth:[self.dataSource numberOfItems:self] - 1],
@@ -309,12 +295,10 @@
                                                CGRectGetHeight(_assistView.frame));
         }
         
-        //  新增sheet的最终形态设置
         insertTagItem.transform = CGAffineTransformMakeScale(1, 1);
         insertTagItem.alpha = 1;
-        
-        //  调整scrollview 的最终offset
-        //  如果可滑动
+
+        //  caculate contentOffset
         if (self.contentSize.width - self.frame.size.width > 0)
         {
             //  新加sheetItem时，offset.x 也要加入相应的长度，
@@ -328,7 +312,6 @@
                                                  oldContentOffset.y);
             }
         }
-        //  如果不可滑动，offset的 x 为0
         else{
             self.contentOffset = CGPointMake(0,
                                              oldContentOffset.y);
@@ -342,18 +325,17 @@
     }];
 }
 
-- (void)deleteTagItemAtIndex:(NSInteger)index complete:(void (^)())complete {
+- (void)deleteItemAtIndex:(NSInteger)index complete:(void (^)())complete {
     
     CGPoint oldContentOffset = self.contentOffset;
-    //  拿到删除的deleteTagItem
     UIView *deleteTagItem = _tagItemsArray[index];
     [self sendSubviewToBack:deleteTagItem];
     
     [UIView animateWithDuration:0.5 animations:^(){
         self.contentSize = CGSizeMake(self.contentSize.width - (deleteTagItem.frame.size.width + self.gap),
                                       self.contentSize.height);
-        
-        //  将删除的item 之后的每个item 位置向前移一个删除item的长度*注意删除长度 可长  可短*， 宽高保持
+    
+        //  every tagItem which behind of deleteTagItem move forward deleteTagItem.width
         [_tagItemsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop){
             UIView *tagItem = (UIView *)obj;
             if (i > index) {
@@ -383,11 +365,10 @@
             }
         }
         
-        //  设置deleteSheetItem 消失的形态
         deleteTagItem.alpha = 0;
         deleteTagItem.transform = CGAffineTransformMakeScale(0.01, 1);
         
-        //  调整scrollview 的最终offset
+        //  caculate contentOffset
         if (self.contentSize.width - self.frame.size.width > 0) {
             if (oldContentOffset.x <= self.contentSize.width - self.frame.size.width) {
                 self.contentOffset = CGPointMake(oldContentOffset.x,
