@@ -88,7 +88,8 @@ UIGestureRecognizerDelegate
     [doubleGesture release];
     
     
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tagManageScrollViewLongPress:)];
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                            action:@selector(tagManageScrollViewLongPress:)];
     [mTagManageView addGestureRecognizer:longPress];
     [longPress release];
 }
