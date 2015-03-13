@@ -90,7 +90,7 @@
 		D42A64341A8F213900DD9805 /* TagManageDemo */ = {
 			isa = PBXGroup;
 			children = (
-				D42A645F1A8F225200DD9805 /* TagManage */,
+				D42A645F1A8F225200DD9805 /* TagManageView */,
 				D42A64391A8F213900DD9805 /* AppDelegate.h */,
 				D42A643A1A8F213900DD9805 /* AppDelegate.m */,
 				D42A643C1A8F213900DD9805 /* ViewController.h */,
@@ -129,7 +129,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D42A645F1A8F225200DD9805 /* TagManage */ = {
+		D42A645F1A8F225200DD9805 /* TagManageView */ = {
 			isa = PBXGroup;
 			children = (
 				D42A64601A8F226300DD9805 /* TagManageView.h */,
@@ -139,6 +139,7 @@
 				D4E974881AB28041001DD9EF /* TagManageViewGestureHelper.h */,
 				D4E974891AB28041001DD9EF /* TagManageViewGestureHelper.m */,
 			);
+			name = TagManageView;
 			path = TagManage;
 			sourceTree = "<group>";
 		};
