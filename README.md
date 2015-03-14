@@ -1,19 +1,42 @@
 TagManage 
 ==============
-<p align="center"><img src="https://github.com/wuhanness/TagManage/blob/master/tagManageDemoImage.png" width="480" height="45"/></p>
-拥有:增加，删除，移动，切换，功能。
-####1.demo中界面基本功能逻辑放置在TagManageScrollView类中。
-主要的Api如下所示：
+<p align="center"><img src="https://github.com/wuhanness/TagManage/blob/master/tagManageDemoShow.gif" width="570" height="61"/></p>
+
+An easy to use TagManageView and usagea bit like as UITableView.
+import the file folder "TagManageView", and implement some datasource.
+
+#Intro
+This control main contain two parts: [view] and [gestureHelper]
+#####1.TagManageView:
+Provide the view base behavior, main AIP and datasource:
 ```objc
-// 在指定的index 位置增加一个标签
-- (void)insertTagItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
-// 删除指定的index 位置的标签
-- (void)deleteTagItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
-// 移动移动一个标签到另一个位置
-- (void)moveTagItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^) ())complete;
+//API
+- (void)reloadTagItems;
+
+// insert a tag at index
+- (void)insertItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
+
+// delete a tag at index
+- (void)deleteItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
+
+// move a tag from fromIndex to toIndex
+- (void)moveItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^) ())complete;
+
+//DataSource
+- (NSInteger)activeItemIndex:(TagManageView *)tagManageView;
+
+- (NSInteger)numberOfItems:(TagManageView *)tagManageView;
+
+- (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index;
+
 ```
-####2.通过加入控制类（controller层），可以功能性扩展，具体在TagManage中。
-在controller层TagManage中，对view层TagManageScrollView增加手势，后期可做到：
-* 点击切换activeTag
-* 长按交换位置
-* 长按自动滚动
+#####2.TagManageViewGestureHelper:
+This class which extend the function of TagManageView by use TagManageView behavior（base API), the main operate delegate as follow:
+```objc
+//  select tagItem call-back
+- (void)tagManageView:(TagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index;
+//  move tagItem call-back
+- (void)tagManageView:(TagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
+```
+#More
+If you just want show something by only use TagManageView, just `TagManageView.supportGesture = NO;`, it will close gestureoperate. Even you can custom gesture then add on TagManageView like TagManageViewGestureHelper to achieve you want.
