@@ -69,7 +69,9 @@
     if ([mTagManageView.delegate conformsToProtocol:@protocol(TagManageViewGestureHelperDelegate)]) {
         if ([mTagManageView.delegate respondsToSelector:@selector(tagManageView:didSelectTagItemAtIndex:)]) {
             NSInteger tapIndex = [mTagManageView indexOfItemAtPoint:[gesture locationInView:mTagManageView]];
-            [(id<TagManageViewGestureHelperDelegate>)mTagManageView.delegate tagManageView:mTagManageView didSelectTagItemAtIndex:tapIndex];
+            if (tapIndex >= 0) {
+                [(id<TagManageViewGestureHelperDelegate>)mTagManageView.delegate tagManageView:mTagManageView didSelectTagItemAtIndex:tapIndex];
+            }
         }
     }
 }
