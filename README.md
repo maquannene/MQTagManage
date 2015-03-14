@@ -8,7 +8,7 @@ import the file folder "TagManageView", and implement some datasource.
 #Intro
 This control main contain two parts: [view] and [gestureHelper]
 #####1.TagManageView:
-provide the view base behavior, main AIP and datasource:
+Provide the view base behavior, main AIP and datasource:
 ```objc
 //API
 - (void)reloadTagItems;
@@ -31,7 +31,7 @@ provide the view base behavior, main AIP and datasource:
 
 ```
 #####2.TagManageViewGestureHelper:
-this class which extend the function of TagManageView by use TagManageView behavior（base API), the main operate delegate as follow:
+This class which extend the function of TagManageView by use TagManageView behavior（base API), the main operate delegate as follow:
 ```objc
 //  select tagItem call-back
 - (void)tagManageView:(TagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index;
@@ -39,4 +39,4 @@ this class which extend the function of TagManageView by use TagManageView behav
 - (void)tagManageView:(TagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 ```
 #More
-if you just want show something by only use TagManageView, just `TagManageView.supportGesture = NO;`, it will close gestureoperate. Even you can custom gesture then add on TagManageView like TagManageViewGestureHelper to achieve you want.
+If you just want show something by only use TagManageView, just `TagManageView.supportGesture = NO;`, it will close gestureoperate. Even you can custom gesture then add on TagManageView like TagManageViewGestureHelper to achieve you want.
