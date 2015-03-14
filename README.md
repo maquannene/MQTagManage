@@ -5,9 +5,9 @@ TagManage
 An easy to use TagManageView and usagea bit like as UITableView.
 import the file folder "TagManageView", and implement some datasource.
 
-##Intro
+#Intro
 This control main contain two parts: [view] and [gestureHelper]
-####1.TagManageView:
+#####1.TagManageView:
 provide the view base behavior, main AIP and datasource:
 ```objc
 //API
@@ -30,7 +30,7 @@ provide the view base behavior, main AIP and datasource:
 - (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index;
 
 ```
-####2.TagManageViewGestureHelper:
+#####2.TagManageViewGestureHelper:
 this class which extend the function of TagManageView by use TagManageView behavior（base API), the main operate delegate as follow:
 ```objc
 //  select tagItem call-back
