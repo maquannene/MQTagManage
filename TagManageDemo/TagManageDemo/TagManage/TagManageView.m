@@ -126,8 +126,6 @@
         [self addSubview:item];
     }
     
-    
-    
     // adjust contentSize
     self.contentSize = CGSizeMake([self getTagItemOriginX:number - 1] + [self getTagItemWidth:number - 1] + CGRectGetWidth(self.assistView.frame),
                                   CGRectGetHeight(self.frame));

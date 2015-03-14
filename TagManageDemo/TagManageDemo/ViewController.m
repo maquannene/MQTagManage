@@ -50,8 +50,10 @@ TagManageViewGestureHelperDelegate
     }
     
     //  tagManageView
-    _tagManageView = [[TagManageView alloc] init];
-    _tagManageView.backgroundColor = [UIColor orangeColor];
+    _tagManageView = [[TagManageView alloc] initWithFrame:CGRectMake(44 * 2,
+                                                                     20,
+                                                                     CGRectGetWidth(self.view.frame) - 44 * 4,
+                                                                     44)];
     _tagManageView.gap = -25;
     _tagManageView.dataSource = self;
     _tagManageView.delegate = self;
@@ -59,13 +61,6 @@ TagManageViewGestureHelperDelegate
     [self createTagManangeViewAssistView];
     [self.view addSubview:_tagManageView];
     [_tagManageView reloadTagItems];
-}
-
-- (void)viewDidLayoutSubviews {
-    _tagManageView.frame = CGRectMake(44 * 2,
-                                      20,
-                                      CGRectGetWidth(self.view.frame) - 44 * 4,
-                                      44);
 }
 
 - (void)createTagManangeViewAssistView {
@@ -130,14 +125,23 @@ TagManageViewGestureHelperDelegate
 }
 
 - (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index {
-    UILabel *tagItem = [[[UILabel alloc] init] autorelease];
-    tagItem.backgroundColor = [UIColor grayColor];
+    UIImageView *imageView = [[[UIImageView alloc] init] autorelease];
+    imageView.backgroundColor = [UIColor clearColor];
+    if (index == activeIndex) {
+        [imageView setImage:[UIImage imageNamed:@"tag_selected.png"]];
+    }
+    else {
+        [imageView setImage:[UIImage imageNamed:@"tag_unselected.png"]];
+    }
+    
+    UILabel *tagItem = [[[UILabel alloc] initWithFrame:imageView.bounds] autorelease];
+    tagItem.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    tagItem.backgroundColor = [UIColor clearColor];
     tagItem.text = dataArray[index];
     tagItem.textAlignment = NSTextAlignmentCenter;
-    tagItem.layer.cornerRadius = 22;
-    tagItem.layer.borderWidth = 2;
-    tagItem.layer.borderColor = [UIColor blackColor].CGColor;
-    return tagItem;
+    [imageView addSubview:tagItem];
+    
+    return imageView;
 }
 
 - (CGFloat)tagManageView:(TagManageView *)tagManageView heightForItemAtIndex:(NSInteger)index {
@@ -151,7 +155,6 @@ TagManageViewGestureHelperDelegate
 #pragma mark -
 #pragma mark - TagManageViewGestureHelperDelegate
 - (void)tagManageView:(TagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index {
-    
     // update data
     activeIndex = index;
     [tagManageView reloadTagItems];
