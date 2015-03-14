@@ -1,6 +1,6 @@
 TagManage 
 ==============
-<p align="center"><img src="https://github.com/wuhanness/TagManage/blob/master/tagManageDemoImage.png"/></p>
+<p align="center"><img src="https://github.com/wuhanness/TagManage/blob/master/tagManageDemoImage.png" width="300" height="50"/></p>
 拥有:增加，删除，移动，切换，功能。
 ####1.demo中界面基本功能逻辑放置在TagManageScrollView类中。
 主要的Api如下所示：
