@@ -5,7 +5,7 @@ TagManage
 An easy to use TagManageView and usagea bit like as UITableView.
 import the file folder "TagManageView", and implement some datasource.
 
-###Intro
+##Intro
 This control main contain two parts: [view] and [gestureHelper]
 ####1.TagManageView:
 provide the view base behavior, main AIP and datasource:
@@ -38,5 +38,5 @@ this class which extend the function of TagManageView by use TagManageView behav
 //  move tagItem call-back
 - (void)tagManageView:(TagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 ```
-###More
+#More
 if you just want show something by only use TagManageView, just `TagManageView.supportGesture = NO;`, it will close gestureoperate. Even you can custom gesture then add on TagManageView like TagManageViewGestureHelper to achieve you want.
