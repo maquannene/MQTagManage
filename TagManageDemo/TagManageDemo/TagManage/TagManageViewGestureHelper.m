@@ -71,6 +71,7 @@
             NSInteger tapIndex = [mTagManageView indexOfItemAtPoint:[gesture locationInView:mTagManageView]];
             if (tapIndex >= 0) {
                 [(id<TagManageViewGestureHelperDelegate>)mTagManageView.delegate tagManageView:mTagManageView didSelectTagItemAtIndex:tapIndex];
+                [mTagManageView reloadTagItems];
             }
         }
     }

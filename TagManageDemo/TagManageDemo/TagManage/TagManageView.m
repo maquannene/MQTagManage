@@ -12,6 +12,7 @@
 
 @property (nonatomic, retain) NSMutableArray *tagItemsArray;
 @property (nonatomic, assign) NSInteger selectedItemIndex;
+@property (assign, nonatomic) BOOL isAnimating;
 
 @end
 
@@ -104,6 +105,18 @@
         return [_dataSource tagManageView:self heightForItemAtIndex:index];
     }
     return 0;
+}
+
+#pragma mark -
+#pragma mark - rewrite method
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (_isAnimating) {
+        return;
+    }
+    if (CGSizeEqualToSize(self.contentSize, CGSizeZero)) {
+        [self reloadTagItems];
+    }
 }
 
 #pragma mark -
@@ -205,7 +218,6 @@
 }
 
 - (void)moveItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^)())complete {
-    
     //  this time, tagItemsArray is old dataSource
     UIView *fromTagItem = _tagItemsArray[fromIndex];
     CGRect toRect = CGRectMake([self getTagItemOriginX:toIndex],
@@ -214,7 +226,7 @@
                                CGRectGetHeight(fromTagItem.frame));
     
     [UIView animateWithDuration:0.5 animations:^(){
-        
+        _isAnimating = YES;
         fromTagItem.frame = toRect;
         
         //  move back , the origin.x of tagItem which > from and <= to move forward fromTagItem.frame.size.width
@@ -248,6 +260,7 @@
         if (complete) {
             complete();
         }
+        _isAnimating = NO;
     }];
 }
 
@@ -272,7 +285,7 @@
     self.contentSize = CGSizeMake(self.contentSize.width + ([self getTagItemWidth:index] + self.gap),
                                   self.contentSize.height);
     [UIView animateWithDuration:0.5 animations:^(){
-        
+        _isAnimating = YES;
         //  every tagItem which behind of insertTagItem move back insertTagItem.width
         [_tagItemsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop){
             UIView *tagItem = (UIView *)obj;
@@ -320,6 +333,8 @@
             complete();
         }
         [insertTagItem removeFromSuperview];
+        [self reloadTagItems];
+        _isAnimating = NO;
     }];
 }
 
@@ -330,6 +345,7 @@
     [self sendSubviewToBack:deleteTagItem];
     
     [UIView animateWithDuration:0.5 animations:^(){
+        _isAnimating = YES;
         self.contentSize = CGSizeMake(self.contentSize.width - (deleteTagItem.frame.size.width + self.gap),
                                       self.contentSize.height);
     
@@ -383,10 +399,11 @@
         }
         
     } completion:^(BOOL finish){
-        if (complete)
-        {
+        if (complete) {
             complete();
         }
+        [self reloadTagItems];
+        _isAnimating = NO;
     }];
 }
 

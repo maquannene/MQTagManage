@@ -46,7 +46,7 @@ TagManageViewGestureHelperDelegate
     activeIndex = 0;
     dataArray = [[NSMutableArray alloc] init];
     for (int i = 0; i < maxConut; i++) {
-        [dataArray addObject:[NSString stringWithFormat:@"- %d -", i]];
+        [dataArray addObject:[NSString stringWithFormat:@" Tag %d ", i]];
     }
     
     //  tagManageView
@@ -60,7 +60,6 @@ TagManageViewGestureHelperDelegate
     _tagManageView.supportGesture = YES;
     [self createTagManangeViewAssistView];
     [self.view addSubview:_tagManageView];
-    [_tagManageView reloadTagItems];
 }
 
 - (void)createTagManangeViewAssistView {
@@ -75,12 +74,11 @@ TagManageViewGestureHelperDelegate
 //  add
 - (void)tagManageAssistViewAction:(UIButton *)button {
     //  update data
-    [dataArray addObject:[NSString stringWithFormat:@"- %d -", dataArray.count]];
+    [dataArray addObject:[NSString stringWithFormat:@" Tag %d ", dataArray.count]];
     
     //  update interface
     [_tagManageView insertItemAtIndex:dataArray.count - 1 complete:^{
         activeIndex = dataArray.count - 1;
-        [_tagManageView reloadTagItems];
     }];
 }
 
@@ -94,7 +92,6 @@ TagManageViewGestureHelperDelegate
         if (activeIndex >= dataArray.count) {
             activeIndex = dataArray.count - 1;
         }
-        [_tagManageView reloadTagItems];
     }];
 }
 
@@ -105,7 +102,7 @@ TagManageViewGestureHelperDelegate
     [dataArray release];
     dataArray = [[NSMutableArray alloc] init];
     for (int i = 0; i < maxConut; i++) {
-        [dataArray addObject:[NSString stringWithFormat:@"- %d -", i]];
+        [dataArray addObject:[NSString stringWithFormat:@" Tag %d ", i]];
     }
     [_tagManageView reloadTagItems];
 }
@@ -157,7 +154,6 @@ TagManageViewGestureHelperDelegate
 - (void)tagManageView:(TagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index {
     // update data
     activeIndex = index;
-    [tagManageView reloadTagItems];
 }
 
 - (void)tagManageView:(TagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
