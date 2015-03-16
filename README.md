@@ -19,7 +19,7 @@ Provide the view base behavior, main AIP and datasource:
 // delete a tag at index
 - (void)deleteItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
 
-// move a tag from fromIndex to toIndex
+// move a tag from fromIndex to toIndex * need call reloadTagItems: on completeBlock
 - (void)moveItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^) ())complete;
 
 //DataSource
@@ -43,5 +43,4 @@ If you just want show something by only use TagManageView, just `TagManageView.s
 
 I am a junior developer, so Welcome to pointed out problem, fork and push.
 Thanks.
-
 The next step, add reuseQueue to promote efficiency and save memory.
