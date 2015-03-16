@@ -6,7 +6,7 @@ An easy to use TagManageView and usagea bit like as UITableView.
 import the file folder "TagManageView", and implement some datasource.
 
 #Intro
-This control main contain two parts: [view] and [gestureHelper]
+This widget main contain two parts: [view] and [gestureHelper]
 #####1.TagManageView:
 Provide the view base behavior, main AIP and datasource:
 ```objc
@@ -40,3 +40,8 @@ This class which extend the function of TagManageView by use TagManageView behav
 ```
 #More
 If you just want show something by only use TagManageView, just `TagManageView.supportGesture = NO;`, it will close gestureoperate. Even you can custom gesture then add on TagManageView like TagManageViewGestureHelper to achieve you want.
+
+I am a junior developer, so Welcome to pointed out problem, fork and push.
+Thanks.
+
+The next step, add reuseQueue to promote efficiency and save memory.
