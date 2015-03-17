@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, TagManageAutoScrollDir) {
 
 @interface TagManageViewGestureHelper : NSObject
 
-@property (assign, nonatomic) BOOL helperEnable;
+@property (assign, nonatomic) BOOL helperEnable;                                            //  default:NO
 @property (retain, nonatomic, readonly) UITapGestureRecognizer *tapGesture;
 @property (retain, nonatomic, readonly) UILongPressGestureRecognizer *longPressGesture;
 

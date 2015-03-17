@@ -32,8 +32,7 @@ TagManageViewGestureHelperDelegate
 
 @implementation ViewController
 
-- (void)dealloc
-{
+- (void)dealloc {
     [_tagManageView release];
     _tagManageView = nil;
     [super dealloc];
@@ -141,19 +140,12 @@ TagManageViewGestureHelperDelegate
     return imageView;
 }
 
-- (CGFloat)tagManageView:(TagManageView *)tagManageView heightForItemAtIndex:(NSInteger)index {
-    return 44;
-}
-
-- (CGFloat)tagManageView:(TagManageView *)tagManageView widthForItemAtIndex:(NSInteger)index {
-    return 135;
-}
-
 #pragma mark -
 #pragma mark - TagManageViewGestureHelperDelegate
 - (void)tagManageView:(TagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index {
     // update data
     activeIndex = index;
+    NSLog(@"active %d", index);
 }
 
 - (void)tagManageView:(TagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {

@@ -29,8 +29,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.alwaysBounceHorizontal = YES;
-        _tagItemsArray = [[NSMutableArray alloc] init];
+        [self baseConfigure];
     }
     return self;
 }
@@ -38,10 +37,16 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.alwaysBounceHorizontal = YES;
-        _tagItemsArray = [[NSMutableArray alloc] init];
+        [self baseConfigure];
     }
     return self;
+}
+
+- (void)baseConfigure {
+    _tagItemHeight = 44;
+    _tagItemWidth = 135;
+    self.alwaysBounceHorizontal = YES;
+    _tagItemsArray = [[NSMutableArray alloc] init];
 }
 
 - (void)setAssistView:(UIView *)assistView {
@@ -81,8 +86,7 @@
 }
 
 
-- (CGFloat)getTagItemOriginX:(NSInteger)index
-{
+- (CGFloat)getTagItemOriginX:(NSInteger)index {
     CGFloat x = 0;
     for (NSInteger i = 0; i < index; i++) {
         x = x + [self getTagItemWidth:i] + self.gap;
@@ -90,21 +94,19 @@
     return x;
 }
 
-- (CGFloat)getTagItemWidth:(NSInteger)index
-{
+- (CGFloat)getTagItemWidth:(NSInteger)index {
     if ([_dataSource respondsToSelector:@selector(tagManageView:widthForItemAtIndex:)]) {
         return [_dataSource tagManageView:self widthForItemAtIndex:index];
     }
-    return 0;
+    return _tagItemWidth;
 }
 
-- (CGFloat)getTagItemHeigh:(NSInteger)index
-{
+- (CGFloat)getTagItemHeigh:(NSInteger)index {
     if ([_dataSource respondsToSelector:@selector(tagManageView:heightForItemAtIndex:)])
     {
         return [_dataSource tagManageView:self heightForItemAtIndex:index];
     }
-    return 0;
+    return _tagItemHeight;
 }
 
 #pragma mark -
@@ -185,7 +187,7 @@
         }
     }
     
-    return -1;
+    return NSNotFound;
 }
 
 - (UIView *)tagForItemAtPoint:(CGPoint)point {
@@ -225,7 +227,7 @@
                                CGRectGetWidth(fromTagItem.frame),
                                CGRectGetHeight(fromTagItem.frame));
     
-    [UIView animateWithDuration:0.5 animations:^(){
+    [UIView animateWithDuration:0.5 animations:^() {
         _isAnimating = YES;
         fromTagItem.frame = toRect;
         
@@ -298,8 +300,7 @@
         }];
         
         //  caculate assistView.frame
-        if (self.assistView)
-        {
+        if (self.assistView) {
             self.assistView.frame = CGRectMake([self getTagItemOriginX:[self.dataSource numberOfItems:self] - 1] + [self getTagItemWidth:[self.dataSource numberOfItems:self] - 1],
                                                0,
                                                CGRectGetWidth(_assistView.frame),
@@ -310,8 +311,7 @@
         insertTagItem.alpha = 1;
 
         //  caculate contentOffset
-        if (self.contentSize.width - self.frame.size.width > 0)
-        {
+        if (self.contentSize.width - self.frame.size.width > 0) {
             //  新加sheetItem时，offset.x 也要加入相应的长度，
             //  如果加上长度后，没有超过最大offset,就可以直接设置，否则设置最大offset.x
             if (oldContentOffset.x + [self getTagItemWidth:index] + self.gap <= self.contentSize.width - self.frame.size.width) {
@@ -344,7 +344,7 @@
     UIView *deleteTagItem = _tagItemsArray[index];
     [self sendSubviewToBack:deleteTagItem];
     
-    [UIView animateWithDuration:0.5 animations:^(){
+    [UIView animateWithDuration:0.5 animations:^() {
         _isAnimating = YES;
         self.contentSize = CGSizeMake(self.contentSize.width - (deleteTagItem.frame.size.width + self.gap),
                                       self.contentSize.height);

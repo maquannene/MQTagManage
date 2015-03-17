@@ -9,7 +9,7 @@
 #import "TagManageViewGestureHelper.h"
 #import "TagManageView.h"
 
-@interface TagManageViewGestureHelper() <UIGestureRecognizerDelegate>
+@interface TagManageViewGestureHelper()<UIGestureRecognizerDelegate>
 
 {
     TagManageView *mTagManageView;
@@ -94,7 +94,6 @@
         currentLongPressIndex = longPressIndex;
         moveFromIndex = longPressIndex;
         
-        
         longPressTag = [mTagManageView tagForItemAtIndex:longPressIndex];
         //  显示临时view 跟着手指移动
         self.mTempMoveTag = [[[UIImageView alloc] initWithFrame:longPressTag.frame] autorelease];
@@ -121,18 +120,15 @@
         // 自动滚动判断
         //如果触及左边自动滚动区
         if (touchPoint.x - mTagManageView.contentOffset.x <= 50 &&
-            touchPoint.x - mTagManageView.contentOffset.x >= 0)
-        {
+            touchPoint.x - mTagManageView.contentOffset.x >= 0) {
             autoScrollDir = TagManageAutoScrollRight;
         }
         //如果触及右边自动滚动区
         else if (touchPoint.x - mTagManageView.contentOffset.x >= mTagManageView.frame.size.width - 50 &&
-                 touchPoint.x - mTagManageView.contentOffset.x <= mTagManageView.frame.size.width)
-        {
+                 touchPoint.x - mTagManageView.contentOffset.x <= mTagManageView.frame.size.width) {
             autoScrollDir = TagManageAutoScrollLeft;
         }
-        else
-        {
+        else {
             autoScrollDir = TagManageAutoScrollStop;
         }
     }
@@ -195,8 +191,7 @@
     currentLongPressIndex = toIndex;
 }
 
-- (UIImage *)imageFromItem:(UIView *)sheetItem
-{
+- (UIImage *)imageFromItem:(UIView *)sheetItem {
     UIGraphicsBeginImageContextWithOptions(sheetItem.bounds.size, NO, 0.0f);
     [sheetItem.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
@@ -223,8 +218,7 @@
     switch (autoScrollDir)
     {
         case TagManageAutoScrollRight:
-            if (mTagManageView.contentOffset.x > 0)
-            {
+            if (mTagManageView.contentOffset.x > 0) {
                 // 自动滚动，mTagManageView的偏移量每次调整1，但是长按的临时产生的_mTempMoveTag要回调1
                 mTagManageView.contentOffset = CGPointMake(mTagManageView.contentOffset.x - 1,
                                                            mTagManageView.contentOffset.y);
@@ -234,9 +228,7 @@
             }
             break;
         case TagManageAutoScrollLeft:
-            
-            if (mTagManageView.contentOffset.x < mTagManageView.contentSize.width - mTagManageView.frame.size.width)
-            {
+            if (mTagManageView.contentOffset.x < mTagManageView.contentSize.width - mTagManageView.frame.size.width) {
                 mTagManageView.contentOffset = CGPointMake(mTagManageView.contentOffset.x + 1,
                                                            mTagManageView.contentOffset.y);
                 _mTempMoveTag.center = CGPointMake(_mTempMoveTag.center.x + 1,

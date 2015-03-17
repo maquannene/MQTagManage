@@ -20,6 +20,7 @@
 
 - (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index;
 
+@optional
 - (CGFloat)tagManageView:(TagManageView *)tagManageView heightForItemAtIndex:(NSInteger)index;
 
 - (CGFloat)tagManageView:(TagManageView *)tagManageView widthForItemAtIndex:(NSInteger)index;
@@ -32,10 +33,12 @@
 
 @interface TagManageView : UIScrollView
 
-@property (nonatomic, assign) id<TagManageViewDataSource> dataSource;
-@property (nonatomic, assign) id<TagManageViewDelegate> delegate;
-@property (nonatomic, retain) UIView *assistView;                       //  assistView behind of last tagItem
-@property (nonatomic, assign) NSInteger gap;                            //  gap of between tagItem
+@property (assign, nonatomic) id<TagManageViewDataSource> dataSource;
+@property (assign, nonatomic) id<TagManageViewDelegate> delegate;
+@property (retain, nonatomic) UIView *assistView;                       //  assistView behind of last tagItem.
+@property (assign, nonatomic) NSInteger gap;                            //  gap of between tagItem. default:0
+@property (assign, nonatomic) NSInteger tagItemHeight;                  //  default:44
+@property (assign, nonatomic) NSInteger tagItemWidth;                   //  default:135
 
 - (void)reloadTagItems;
 - (void)autoAdjustZCoordinate;
