@@ -1,6 +1,6 @@
 //
-//  TagManageView.h
-//  TagManageDemo
+//  MQTagManageView.h
+//  MQTagManageDemo
 //
 //  Created by 马权 on 2/14/15.
 //  Copyright (c) 2015 maquan. All rights reserved.
@@ -8,33 +8,33 @@
 
 #import <UIKit/UIKit.h>
 
-@class TagManageView;
+@class MQTagManageView;
 
-@protocol TagManageViewDataSource<NSObject>
+@protocol MQTagManageViewDataSource<NSObject>
 
 @required
 
-- (NSInteger)activeItemIndex:(TagManageView *)tagManageView;
+- (NSInteger)activeItemIndex:(MQTagManageView *)tagManageView;
 
-- (NSInteger)numberOfItems:(TagManageView *)tagManageView;
+- (NSInteger)numberOfItems:(MQTagManageView *)tagManageView;
 
-- (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index;
+- (UIView *)tagManageView:(MQTagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index;
 
 @optional
-- (CGFloat)tagManageView:(TagManageView *)tagManageView heightForItemAtIndex:(NSInteger)index;
+- (CGFloat)tagManageView:(MQTagManageView *)tagManageView heightForItemAtIndex:(NSInteger)index;
 
-- (CGFloat)tagManageView:(TagManageView *)tagManageView widthForItemAtIndex:(NSInteger)index;
-
-@end
-
-@protocol TagManageViewDelegate<UIScrollViewDelegate>
+- (CGFloat)tagManageView:(MQTagManageView *)tagManageView widthForItemAtIndex:(NSInteger)index;
 
 @end
 
-@interface TagManageView : UIScrollView
+@protocol MQTagManageViewDelegate<UIScrollViewDelegate>
 
-@property (assign, nonatomic) id<TagManageViewDataSource> dataSource;
-@property (assign, nonatomic) id<TagManageViewDelegate> delegate;
+@end
+
+@interface MQTagManageView : UIScrollView
+
+@property (assign, nonatomic) id<MQTagManageViewDataSource> dataSource;
+@property (assign, nonatomic) id<MQTagManageViewDelegate> delegate;
 @property (retain, nonatomic) UIView *assistView;                       //  assistView behind of last tagItem.
 @property (assign, nonatomic) NSInteger gap;                            //  gap of between tagItem. default:0
 @property (assign, nonatomic) NSInteger tagItemHeight;                  //  default:44

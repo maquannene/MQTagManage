@@ -1,24 +1,24 @@
 //
 //  ViewController.m
-//  TagManageDemo
+//  MQTagManageDemo
 //
 //  Created by 马权 on 2/14/15.
 //  Copyright (c) 2015 maquan. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "TagManageView.h"
-#import "TagManageView+Gesture.h"
-#import "TagManageViewGestureHelper.h"
+#import "MQTagManageView.h"
+#import "MQTagManageView+Gesture.h"
+#import "MQTagManageViewGestureHelper.h"
 
 static int maxConut = 10;
 
 @interface ViewController ()
 
 <
-TagManageViewDelegate,
-TagManageViewDataSource,
-TagManageViewGestureHelperDelegate
+MQTagManageViewDelegate,
+MQTagManageViewDataSource,
+MQTagManageViewGestureHelperDelegate
 >
 
 {
@@ -26,7 +26,7 @@ TagManageViewGestureHelperDelegate
     NSInteger activeIndex;
 }
 
-@property (retain, nonatomic) TagManageView *tagManageView;
+@property (retain, nonatomic) MQTagManageView *tagManageView;
 
 @end
 
@@ -49,7 +49,7 @@ TagManageViewGestureHelperDelegate
     }
     
     //  tagManageView
-    _tagManageView = [[TagManageView alloc] initWithFrame:CGRectMake(44 * 2,
+    _tagManageView = [[MQTagManageView alloc] initWithFrame:CGRectMake(44 * 2,
                                                                      20,
                                                                      CGRectGetWidth(self.view.frame) - 44 * 4,
                                                                      44)];
@@ -111,16 +111,16 @@ TagManageViewGestureHelperDelegate
 }
 
 #pragma mark -
-#pragma mark - TagManageViewDataSource
-- (NSInteger)activeItemIndex:(TagManageView *)tagManageView {
+#pragma mark - MQTagManageViewDataSource
+- (NSInteger)activeItemIndex:(MQTagManageView *)tagManageView {
     return activeIndex;
 }
 
-- (NSInteger)numberOfItems:(TagManageView *)tagManageView {
+- (NSInteger)numberOfItems:(MQTagManageView *)tagManageView {
     return dataArray.count;
 }
 
-- (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index {
+- (UIView *)tagManageView:(MQTagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index {
     UIImageView *imageView = [[[UIImageView alloc] init] autorelease];
     imageView.backgroundColor = [UIColor clearColor];
     if (index == activeIndex) {
@@ -141,14 +141,14 @@ TagManageViewGestureHelperDelegate
 }
 
 #pragma mark -
-#pragma mark - TagManageViewGestureHelperDelegate
-- (void)tagManageView:(TagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index {
+#pragma mark - MQTagManageViewGestureHelperDelegate
+- (void)tagManageView:(MQTagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index {
     // update data
     activeIndex = index;
     NSLog(@"active %d", index);
 }
 
-- (void)tagManageView:(TagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
+- (void)tagManageView:(MQTagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
     NSLog(@"from %d to %d", fromIndex, toIndex);
     
     // update data

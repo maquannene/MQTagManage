@@ -14,11 +14,11 @@
 		D42A64431A8F213900DD9805 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D42A64421A8F213900DD9805 /* Images.xcassets */; };
 		D42A64461A8F213900DD9805 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D42A64441A8F213900DD9805 /* LaunchScreen.xib */; };
 		D42A64521A8F213900DD9805 /* TagManageDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64511A8F213900DD9805 /* TagManageDemoTests.m */; };
-		D42A64621A8F226300DD9805 /* TagManageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64611A8F226300DD9805 /* TagManageView.m */; };
+		D42A64621A8F226300DD9805 /* MQTagManageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D42A64611A8F226300DD9805 /* MQTagManageView.m */; };
 		D4C93F6D1AB40DCF0078EA61 /* tag_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C93F6B1AB40DCF0078EA61 /* tag_selected.png */; };
 		D4C93F6E1AB40DCF0078EA61 /* tag_unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C93F6C1AB40DCF0078EA61 /* tag_unselected.png */; };
-		D4E974871AB27D62001DD9EF /* TagManageView+Gesture.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E974861AB27D62001DD9EF /* TagManageView+Gesture.m */; };
-		D4E9748A1AB28041001DD9EF /* TagManageViewGestureHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E974891AB28041001DD9EF /* TagManageViewGestureHelper.m */; };
+		D4E974871AB27D62001DD9EF /* MQTagManageView+Gesture.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E974861AB27D62001DD9EF /* MQTagManageView+Gesture.m */; };
+		D4E9748A1AB28041001DD9EF /* MQTagManageViewGestureHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E974891AB28041001DD9EF /* MQTagManageViewGestureHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,14 +45,14 @@
 		D42A644B1A8F213900DD9805 /* TagManageDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TagManageDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D42A64501A8F213900DD9805 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D42A64511A8F213900DD9805 /* TagManageDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagManageDemoTests.m; sourceTree = "<group>"; };
-		D42A64601A8F226300DD9805 /* TagManageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagManageView.h; sourceTree = "<group>"; };
-		D42A64611A8F226300DD9805 /* TagManageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagManageView.m; sourceTree = "<group>"; };
+		D42A64601A8F226300DD9805 /* MQTagManageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTagManageView.h; sourceTree = "<group>"; };
+		D42A64611A8F226300DD9805 /* MQTagManageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTagManageView.m; sourceTree = "<group>"; };
 		D4C93F6B1AB40DCF0078EA61 /* tag_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag_selected.png; sourceTree = "<group>"; };
 		D4C93F6C1AB40DCF0078EA61 /* tag_unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag_unselected.png; sourceTree = "<group>"; };
-		D4E974851AB27D62001DD9EF /* TagManageView+Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TagManageView+Gesture.h"; sourceTree = "<group>"; };
-		D4E974861AB27D62001DD9EF /* TagManageView+Gesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TagManageView+Gesture.m"; sourceTree = "<group>"; };
-		D4E974881AB28041001DD9EF /* TagManageViewGestureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagManageViewGestureHelper.h; sourceTree = "<group>"; };
-		D4E974891AB28041001DD9EF /* TagManageViewGestureHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagManageViewGestureHelper.m; sourceTree = "<group>"; };
+		D4E974851AB27D62001DD9EF /* MQTagManageView+Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MQTagManageView+Gesture.h"; sourceTree = "<group>"; };
+		D4E974861AB27D62001DD9EF /* MQTagManageView+Gesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MQTagManageView+Gesture.m"; sourceTree = "<group>"; };
+		D4E974881AB28041001DD9EF /* MQTagManageViewGestureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTagManageViewGestureHelper.h; sourceTree = "<group>"; };
+		D4E974891AB28041001DD9EF /* MQTagManageViewGestureHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTagManageViewGestureHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,12 +138,12 @@
 		D42A645F1A8F225200DD9805 /* TagManageView */ = {
 			isa = PBXGroup;
 			children = (
-				D42A64601A8F226300DD9805 /* TagManageView.h */,
-				D42A64611A8F226300DD9805 /* TagManageView.m */,
-				D4E974851AB27D62001DD9EF /* TagManageView+Gesture.h */,
-				D4E974861AB27D62001DD9EF /* TagManageView+Gesture.m */,
-				D4E974881AB28041001DD9EF /* TagManageViewGestureHelper.h */,
-				D4E974891AB28041001DD9EF /* TagManageViewGestureHelper.m */,
+				D42A64601A8F226300DD9805 /* MQTagManageView.h */,
+				D42A64611A8F226300DD9805 /* MQTagManageView.m */,
+				D4E974851AB27D62001DD9EF /* MQTagManageView+Gesture.h */,
+				D4E974861AB27D62001DD9EF /* MQTagManageView+Gesture.m */,
+				D4E974881AB28041001DD9EF /* MQTagManageViewGestureHelper.h */,
+				D4E974891AB28041001DD9EF /* MQTagManageViewGestureHelper.m */,
 			);
 			name = TagManageView;
 			path = TagManage;
@@ -251,11 +251,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E9748A1AB28041001DD9EF /* TagManageViewGestureHelper.m in Sources */,
-				D4E974871AB27D62001DD9EF /* TagManageView+Gesture.m in Sources */,
+				D4E9748A1AB28041001DD9EF /* MQTagManageViewGestureHelper.m in Sources */,
+				D4E974871AB27D62001DD9EF /* MQTagManageView+Gesture.m in Sources */,
 				D42A643E1A8F213900DD9805 /* ViewController.m in Sources */,
 				D42A643B1A8F213900DD9805 /* AppDelegate.m in Sources */,
-				D42A64621A8F226300DD9805 /* TagManageView.m in Sources */,
+				D42A64621A8F226300DD9805 /* MQTagManageView.m in Sources */,
 				D42A64381A8F213900DD9805 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,7 +332,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -368,7 +368,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

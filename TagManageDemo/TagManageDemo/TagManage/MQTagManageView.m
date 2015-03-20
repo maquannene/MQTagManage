@@ -1,14 +1,14 @@
 //
-//  TagManageView.m
-//  TagManageDemo
+//  MQTagManageView.m
+//  MQTagManageDemo
 //
 //  Created by 马权 on 2/14/15.
 //  Copyright (c) 2015 maquan. All rights reserved.
 //
 
-#import "TagManageView.h"
+#import "MQTagManageView.h"
 
-@interface TagManageView()
+@interface MQTagManageView()
 
 @property (nonatomic, retain) NSMutableArray *tagItemsArray;
 @property (nonatomic, assign) NSInteger selectedItemIndex;
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation TagManageView
+@implementation MQTagManageView
 
 - (void)dealloc {
     [_tagItemsArray release];

@@ -1,16 +1,16 @@
 //
-//  TagManageView+Gesture.h
-//  TagManageDemo
+//  MQTagManageView+Gesture.h
+//  MQTagManageDemo
 //
 //  Created by 马权 on 3/13/15.
 //  Copyright (c) 2015 maquan. All rights reserved.
 //
 
-#import "TagManageView.h"
+#import "MQTagManageView.h"
 
-@class TagManageViewGestureHelper;
+@class MQTagManageViewGestureHelper;
 
-@interface TagManageView (Gesture)
+@interface MQTagManageView (Gesture)
 
 @property (assign, nonatomic) BOOL supportGesture;
 
