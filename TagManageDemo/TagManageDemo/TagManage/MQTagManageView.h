@@ -42,6 +42,7 @@
 
 - (void)reloadTagItems;
 - (void)autoAdjustZCoordinate;
+- (id)dequeueReusableTag:(NSInteger)index;
 
 - (CGRect)rectOfItemAtIndex:(NSInteger)index;
 - (NSInteger)indexOfItemAtPoint:(CGPoint)point;

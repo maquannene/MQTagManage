@@ -78,14 +78,6 @@
     }
 }
 
-- (void)cleanTagItemsArray {
-    [_tagItemsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        UIView *tagItem = obj;
-        [tagItem removeFromSuperview];
-    }];
-}
-
-
 - (CGFloat)getTagItemOriginX:(NSInteger)index {
     CGFloat x = 0;
     for (NSInteger i = 0; i < index; i++) {
@@ -125,41 +117,40 @@
 #pragma mark - public method
 
 - (void)reloadTagItems {
-    
-    //  first, clean old tagItemsArray
-    if (_tagItemsArray.count) {
-        [self cleanTagItemsArray];
-        [_tagItemsArray removeAllObjects];
-    }
-    
-    //  second, add every tagItem by datasource
+    //  reset every tagItem by datasource
     NSInteger number = [self.dataSource numberOfItems:self];
+    CGFloat x = 0;
     for (NSInteger index = 0; index < number; index++) {
         UIView *item = [self.dataSource tagManageView:self tagForItemAtIndex:index];
-        item.frame = CGRectMake([self getTagItemOriginX:index], 0, [self getTagItemWidth:index], [self getTagItemHeigh:index]);
-        [_tagItemsArray addObject:item];
-        [self addSubview:item];
+        item.frame = CGRectMake(x,
+                                0,
+                                [self getTagItemWidth:index],
+                                [self getTagItemHeigh:index]);
+        x = x + [self getTagItemWidth:index] + self.gap;
+        if (!item.superview) {
+            [_tagItemsArray addObject:item];
+            [self addSubview:item];
+        }
     }
-    
+    //  remove needless
+    if (_tagItemsArray.count > number) {
+        NSInteger removeTimes = _tagItemsArray.count - number;
+        for (NSInteger i = 0; i < removeTimes; i++) {
+            UIView *tagItem = _tagItemsArray.lastObject;
+            [tagItem removeFromSuperview];
+            [_tagItemsArray removeLastObject];
+        }
+    }
     // adjust contentSize
-    self.contentSize = CGSizeMake([self getTagItemOriginX:number - 1] + [self getTagItemWidth:number - 1] + CGRectGetWidth(self.assistView.frame),
+    UIView * lastTagItem = self.tagItemsArray.lastObject;
+    self.contentSize = CGSizeMake(CGRectGetMaxX(lastTagItem.frame) + CGRectGetWidth(self.assistView.frame),
                                   CGRectGetHeight(self.frame));
     
     [self updateAssistViewFrame];
     [self autoAdjustZCoordinate];
 }
 
-- (void)autoAdjustZCoordinate
-{
-    
-    [_tagItemsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-        UIView *tagItem = obj;
-        tagItem.frame = CGRectMake([self getTagItemOriginX:index],
-                                   0,
-                                   [self getTagItemWidth:index],
-                                   [self getTagItemHeigh:index]);
-    }];
-    
+- (void)autoAdjustZCoordinate {
     for (NSInteger index = self.activeItemIndex - 1; index >= 0 ; index--) {
         UIView *tagItem = (UIView *)_tagItemsArray[index];
         [self sendSubviewToBack:tagItem];
@@ -170,8 +161,14 @@
     }
 }
 
-- (NSInteger)indexOfItemAtPoint:(CGPoint)point
-{
+- (id)dequeueReusableTag:(NSInteger)index {
+    if (index >= _tagItemsArray.count) {
+        return nil;
+    }
+    return _tagItemsArray[index];
+}
+
+- (NSInteger)indexOfItemAtPoint:(CGPoint)point {
     for (NSInteger index = self.activeItemIndex; index >= 0; index -- ) {
         CGRect frame = [self rectOfItemAtIndex:index];
         if (CGRectContainsPoint(frame, CGPointMake(point.x, CGRectGetMidY(frame)))) {
@@ -399,6 +396,8 @@
         }
         
     } completion:^(BOOL finish){
+        deleteTagItem.alpha = 1;
+        deleteTagItem.transform = CGAffineTransformMakeScale(1, 1);
         if (complete) {
             complete();
         }

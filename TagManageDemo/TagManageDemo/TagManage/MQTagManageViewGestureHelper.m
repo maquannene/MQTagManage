@@ -14,7 +14,7 @@
 {
     MQTagManageView *mMQTagManageView;
     
-    MQTagManageAutoScrollDir autoScrollDir;
+
     UIView *longPressTag;                               //  记录长按的tag
     NSInteger moveFromIndex;
     NSInteger currentLongPressIndex;
@@ -23,6 +23,7 @@
 
 @property (retain, nonatomic) UIImageView *mTempMoveTag;
 @property (retain, nonatomic) NSTimer *autoMoveTimeer;
+@property (assign, nonatomic) MQTagManageAutoScrollDir autoScrollDir;
 
 @end
 
@@ -52,7 +53,7 @@
         _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(tagManageViewLongPress:)];
         [mMQTagManageView addGestureRecognizer:_longPressGesture];
-        
+        self.autoScrollDir = MQTagManageAutoScrollStop;
     }
     return self;
 }
@@ -61,6 +62,23 @@
     _helperEnable = helperEnable;
     _tapGesture.enabled = helperEnable;
     _longPressGesture.enabled = helperEnable;
+}
+
+- (void)setAutoScrollDir:(MQTagManageAutoScrollDir)autoScrollDir {
+    if (_autoScrollDir != autoScrollDir) {
+        _autoScrollDir = autoScrollDir;
+        switch (_autoScrollDir) {
+            case MQTagManageAutoScrollStop:
+                [self stopAutoScrollTimer];
+                break;
+            case MQTagManageAutoScrollLeft:
+            case MQTagManageAutoScrollRight:
+                [self startAutoScrollTimer];
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 #pragma mark -
@@ -102,9 +120,6 @@
         [mMQTagManageView addSubview:_mTempMoveTag];
         //  长按的tag要隐藏
         longPressTag.hidden = YES;
-        
-        //  一旦长按，要开启自动滚动timer
-        [self startAutoScrollTimer];
     }
     if (gesture.state == UIGestureRecognizerStateChanged) {
         
@@ -121,15 +136,15 @@
         //如果触及左边自动滚动区
         if (touchPoint.x - mMQTagManageView.contentOffset.x <= 50 &&
             touchPoint.x - mMQTagManageView.contentOffset.x >= 0) {
-            autoScrollDir = MQTagManageAutoScrollRight;
+            self.autoScrollDir = MQTagManageAutoScrollRight;
         }
         //如果触及右边自动滚动区
         else if (touchPoint.x - mMQTagManageView.contentOffset.x >= mMQTagManageView.frame.size.width - 50 &&
                  touchPoint.x - mMQTagManageView.contentOffset.x <= mMQTagManageView.frame.size.width) {
-            autoScrollDir = MQTagManageAutoScrollLeft;
+            self.autoScrollDir = MQTagManageAutoScrollLeft;
         }
         else {
-            autoScrollDir = MQTagManageAutoScrollStop;
+            self.autoScrollDir = MQTagManageAutoScrollStop;
         }
     }
     if (gesture.state == UIGestureRecognizerStateCancelled ||
@@ -153,13 +168,11 @@
                     [(id<MQTagManageViewGestureHelperDelegate>)mMQTagManageView.delegate tagManageView:mMQTagManageView didMoveItemFromIndex:moveFromIndex toIndex:currentLongPressIndex];
                 }
             }
-            
             if (moveFromIndex != currentLongPressIndex) {
                 [mMQTagManageView reloadTagItems];
             }
         }];
-        
-        [self stopAutoScrollTimer];
+        self.autoScrollDir = MQTagManageAutoScrollStop;
     }
 }
 
@@ -205,7 +218,6 @@
                                                          selector:@selector(autoScroll)
                                                          userInfo:nil
                                                           repeats:YES];
-    autoScrollDir = MQTagManageAutoScrollStop;
 }
 
 - (void)stopAutoScrollTimer {
@@ -215,7 +227,7 @@
 }
 
 - (void)autoScroll {
-    switch (autoScrollDir)
+    switch (_autoScrollDir)
     {
         case MQTagManageAutoScrollRight:
             if (mMQTagManageView.contentOffset.x > 0) {

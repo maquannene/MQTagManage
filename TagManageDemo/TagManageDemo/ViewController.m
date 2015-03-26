@@ -11,7 +11,7 @@
 #import "MQTagManageView+Gesture.h"
 #import "MQTagManageViewGestureHelper.h"
 
-static int maxConut = 10;
+static int maxConut = 3;
 
 @interface ViewController ()
 
@@ -121,7 +121,16 @@ MQTagManageViewGestureHelperDelegate
 }
 
 - (UIView *)tagManageView:(MQTagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index {
-    UIImageView *imageView = [[[UIImageView alloc] init] autorelease];
+    UIImageView *imageView = [tagManageView dequeueReusableTag:index];
+    if (!imageView) {
+        imageView = [[[UIImageView alloc] init] autorelease];
+        UILabel *tagItem = [[[UILabel alloc] initWithFrame:imageView.bounds] autorelease];
+        tagItem.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        tagItem.backgroundColor = [UIColor clearColor];
+        tagItem.textAlignment = NSTextAlignmentCenter;
+        tagItem.tag = 999;
+        [imageView addSubview:tagItem];
+    }
     imageView.backgroundColor = [UIColor clearColor];
     if (index == activeIndex) {
         [imageView setImage:[UIImage imageNamed:@"tag_selected.png"]];
@@ -130,13 +139,8 @@ MQTagManageViewGestureHelperDelegate
         [imageView setImage:[UIImage imageNamed:@"tag_unselected.png"]];
     }
     
-    UILabel *tagItem = [[[UILabel alloc] initWithFrame:imageView.bounds] autorelease];
-    tagItem.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    tagItem.backgroundColor = [UIColor clearColor];
+    UILabel *tagItem = (UILabel *)[imageView viewWithTag:999];
     tagItem.text = dataArray[index];
-    tagItem.textAlignment = NSTextAlignmentCenter;
-    [imageView addSubview:tagItem];
-    
     return imageView;
 }
 
