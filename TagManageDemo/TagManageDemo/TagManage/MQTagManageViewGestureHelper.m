@@ -12,13 +12,11 @@
 @interface MQTagManageViewGestureHelper()<UIGestureRecognizerDelegate>
 
 {
-    MQTagManageView *mMQTagManageView;
-    
-
-    UIView *longPressTag;                               //  记录长按的tag
-    NSInteger moveFromIndex;
-    NSInteger currentLongPressIndex;
-    NSInteger currentActiveIndex;
+    MQTagManageView *_tagManageView;
+    UIView *_longPressTag;                               //  记录长按的tag
+    NSInteger _moveFromIndex;
+    NSInteger _currentLongPressIndex;
+    NSInteger _currentActiveIndex;
 }
 
 @property (retain, nonatomic) UIImageView *mTempMoveTag;
@@ -42,17 +40,17 @@
 - (instancetype)initWithTagManageView:(MQTagManageView *)tagManageView {
     self = [super init];
     if (self) {
-        mMQTagManageView = tagManageView;
+        _tagManageView = tagManageView;
         
         _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                               action:@selector(tagManageViewTap:)];
         _tapGesture.delegate = self;
         _tapGesture.numberOfTapsRequired = 1;
-        [mMQTagManageView addGestureRecognizer:_tapGesture];
+        [_tagManageView addGestureRecognizer:_tapGesture];
         
         _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(tagManageViewLongPress:)];
-        [mMQTagManageView addGestureRecognizer:_longPressGesture];
+        [_tagManageView addGestureRecognizer:_longPressGesture];
         self.autoScrollDir = MQTagManageAutoScrollStop;
     }
     return self;
@@ -84,12 +82,12 @@
 #pragma mark -
 #pragma mark - GestureAction
 - (void)tagManageViewTap:(UITapGestureRecognizer *)gesture  {
-    if ([mMQTagManageView.delegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
-        if ([mMQTagManageView.delegate respondsToSelector:@selector(tagManageView:didSelectTagItemAtIndex:)]) {
-            NSInteger tapIndex = [mMQTagManageView indexOfItemAtPoint:[gesture locationInView:mMQTagManageView]];
+    if ([_tagManageView.delegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
+        if ([_tagManageView.delegate respondsToSelector:@selector(tagManageView:didSelectTagItemAtIndex:)]) {
+            NSInteger tapIndex = [_tagManageView indexOfItemAtPoint:[gesture locationInView:_tagManageView]];
             if (tapIndex >= 0) {
-                [(id<MQTagManageViewGestureHelperDelegate>)mMQTagManageView.delegate tagManageView:mMQTagManageView didSelectTagItemAtIndex:tapIndex];
-                [mMQTagManageView reloadTagItems];
+                [(id<MQTagManageViewGestureHelperDelegate>)_tagManageView.delegate tagManageView:_tagManageView didSelectTagItemAtIndex:tapIndex];
+                [_tagManageView reloadTagItems];
             }
         }
     }
@@ -97,34 +95,34 @@
 
 - (void)tagManageViewLongPress:(UILongPressGestureRecognizer *)gesture {
     
-    CGPoint touchPoint = [gesture locationInView:mMQTagManageView];
+    CGPoint touchPoint = [gesture locationInView:_tagManageView];
     
     if (gesture.state == UIGestureRecognizerStateBegan) {
         
         //  记录长按起始位置
-        NSInteger longPressIndex = [mMQTagManageView indexOfItemAtPoint:touchPoint];
+        NSInteger longPressIndex = [_tagManageView indexOfItemAtPoint:touchPoint];
         
         //  如果没有点击到tag,或者点击超范围 容错处理。
-        if (longPressTag < 0 || touchPoint.x > mMQTagManageView.contentSize.width) {
+        if (_longPressTag < 0 || touchPoint.x > _tagManageView.contentSize.width) {
             return;
         }
         
-        currentLongPressIndex = longPressIndex;
-        moveFromIndex = longPressIndex;
+        _currentLongPressIndex = longPressIndex;
+        _moveFromIndex = longPressIndex;
         
-        longPressTag = [mMQTagManageView tagForItemAtIndex:longPressIndex];
+        _longPressTag = [_tagManageView tagForItemAtIndex:longPressIndex];
         //  显示临时view 跟着手指移动
-        self.mTempMoveTag = [[[UIImageView alloc] initWithFrame:longPressTag.frame] autorelease];
-        _mTempMoveTag.image = [self imageFromItem:longPressTag];
+        self.mTempMoveTag = [[[UIImageView alloc] initWithFrame:_longPressTag.frame] autorelease];
+        _mTempMoveTag.image = [self imageFromItem:_longPressTag];
         _mTempMoveTag.alpha = .8;
-        [mMQTagManageView addSubview:_mTempMoveTag];
+        [_tagManageView addSubview:_mTempMoveTag];
         //  长按的tag要隐藏
-        longPressTag.hidden = YES;
+        _longPressTag.hidden = YES;
     }
     if (gesture.state == UIGestureRecognizerStateChanged) {
         
         //  容错处理
-        if (touchPoint.x > mMQTagManageView.contentSize.width) {
+        if (touchPoint.x > _tagManageView.contentSize.width) {
             return;
         }
         
@@ -134,13 +132,13 @@
         
         // 自动滚动判断
         //如果触及左边自动滚动区
-        if (touchPoint.x - mMQTagManageView.contentOffset.x <= 50 &&
-            touchPoint.x - mMQTagManageView.contentOffset.x >= 0) {
+        if (touchPoint.x - _tagManageView.contentOffset.x <= 50 &&
+            touchPoint.x - _tagManageView.contentOffset.x >= 0) {
             self.autoScrollDir = MQTagManageAutoScrollRight;
         }
         //如果触及右边自动滚动区
-        else if (touchPoint.x - mMQTagManageView.contentOffset.x >= mMQTagManageView.frame.size.width - 50 &&
-                 touchPoint.x - mMQTagManageView.contentOffset.x <= mMQTagManageView.frame.size.width) {
+        else if (touchPoint.x - _tagManageView.contentOffset.x >= _tagManageView.frame.size.width - 50 &&
+                 touchPoint.x - _tagManageView.contentOffset.x <= _tagManageView.frame.size.width) {
             self.autoScrollDir = MQTagManageAutoScrollLeft;
         }
         else {
@@ -157,19 +155,19 @@
         }
         
         [UIView animateWithDuration:.4 animations:^{
-            _mTempMoveTag.frame = longPressTag.frame;
+            _mTempMoveTag.frame = _longPressTag.frame;
         } completion:^(BOOL finished) {
-            longPressTag.hidden = NO;
+            _longPressTag.hidden = NO;
             [_mTempMoveTag removeFromSuperview];
             
             //  didMove delegate
-            if ([mMQTagManageView.delegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
-                if ([mMQTagManageView.delegate respondsToSelector:@selector(tagManageView:didMoveItemFromIndex:toIndex:)]) {
-                    [(id<MQTagManageViewGestureHelperDelegate>)mMQTagManageView.delegate tagManageView:mMQTagManageView didMoveItemFromIndex:moveFromIndex toIndex:currentLongPressIndex];
+            if ([_tagManageView.delegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
+                if ([_tagManageView.delegate respondsToSelector:@selector(tagManageView:didMoveItemFromIndex:toIndex:)]) {
+                    [(id<MQTagManageViewGestureHelperDelegate>)_tagManageView.delegate tagManageView:_tagManageView didMoveItemFromIndex:_moveFromIndex toIndex:_currentLongPressIndex];
                 }
             }
-            if (moveFromIndex != currentLongPressIndex) {
-                [mMQTagManageView reloadTagItems];
+            if (_moveFromIndex != _currentLongPressIndex) {
+                [_tagManageView reloadTagItems];
             }
         }];
         self.autoScrollDir = MQTagManageAutoScrollStop;
@@ -177,31 +175,31 @@
 }
 
 - (void)exchangeIfNeeded {
-    NSInteger toIndex = [mMQTagManageView indexOfItemAtPoint:CGPointMake(_mTempMoveTag.center.x, _mTempMoveTag.center.y)];
+    NSInteger toIndex = [_tagManageView indexOfItemAtPoint:CGPointMake(_mTempMoveTag.center.x, _mTempMoveTag.center.y)];
     if (toIndex < 0) {
         return;
     }
-    CGRect toTagRect = [mMQTagManageView rectOfItemAtIndex:toIndex];
+    CGRect toTagRect = [_tagManageView rectOfItemAtIndex:toIndex];
     
-    if (toIndex > currentLongPressIndex && CGRectGetMidX(_mTempMoveTag.frame) < CGRectGetMidX(toTagRect)) {
+    if (toIndex > _currentLongPressIndex && CGRectGetMidX(_mTempMoveTag.frame) < CGRectGetMidX(toTagRect)) {
         toIndex --;
     }
-    if (toIndex < currentLongPressIndex && CGRectGetMidX(_mTempMoveTag.frame) > CGRectGetMidX(toTagRect)) {
+    if (toIndex < _currentLongPressIndex && CGRectGetMidX(_mTempMoveTag.frame) > CGRectGetMidX(toTagRect)) {
         toIndex ++;
     }
     
-    if (currentLongPressIndex == currentActiveIndex) {
-        currentActiveIndex = toIndex;
+    if (_currentLongPressIndex == _currentActiveIndex) {
+        _currentActiveIndex = toIndex;
     }
     else {
-        if (toIndex == currentActiveIndex) {
-            currentActiveIndex = currentLongPressIndex;
+        if (toIndex == _currentActiveIndex) {
+            _currentActiveIndex = _currentLongPressIndex;
         }
     }
     
-    [mMQTagManageView moveItemAtIndex:currentLongPressIndex toIndex:toIndex complete:nil];
+    [_tagManageView moveItemAtIndex:_currentLongPressIndex toIndex:toIndex complete:nil];
     
-    currentLongPressIndex = toIndex;
+    _currentLongPressIndex = toIndex;
 }
 
 - (UIImage *)imageFromItem:(UIView *)sheetItem {
@@ -230,19 +228,19 @@
     switch (_autoScrollDir)
     {
         case MQTagManageAutoScrollRight:
-            if (mMQTagManageView.contentOffset.x > 0) {
-                // 自动滚动，mMQTagManageView的偏移量每次调整1，但是长按的临时产生的_mTempMoveTag要回调1
-                mMQTagManageView.contentOffset = CGPointMake(mMQTagManageView.contentOffset.x - 1,
-                                                           mMQTagManageView.contentOffset.y);
+            if (_tagManageView.contentOffset.x > 0) {
+                // 自动滚动，_tagManageView的偏移量每次调整1，但是长按的临时产生的_mTempMoveTag要回调1
+                _tagManageView.contentOffset = CGPointMake(_tagManageView.contentOffset.x - 1,
+                                                           _tagManageView.contentOffset.y);
                 _mTempMoveTag.center = CGPointMake(_mTempMoveTag.center.x - 1,
                                                    _mTempMoveTag.center.y);
                 [self exchangeIfNeeded];
             }
             break;
         case MQTagManageAutoScrollLeft:
-            if (mMQTagManageView.contentOffset.x < mMQTagManageView.contentSize.width - mMQTagManageView.frame.size.width) {
-                mMQTagManageView.contentOffset = CGPointMake(mMQTagManageView.contentOffset.x + 1,
-                                                           mMQTagManageView.contentOffset.y);
+            if (_tagManageView.contentOffset.x < _tagManageView.contentSize.width - _tagManageView.frame.size.width) {
+                _tagManageView.contentOffset = CGPointMake(_tagManageView.contentOffset.x + 1,
+                                                           _tagManageView.contentOffset.y);
                 _mTempMoveTag.center = CGPointMake(_mTempMoveTag.center.x + 1,
                                                    _mTempMoveTag.center.y);
                 [self exchangeIfNeeded];
