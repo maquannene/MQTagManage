@@ -49,7 +49,7 @@
 - (UIView *)tagForItemAtPoint:(CGPoint)point;
 - (UIView *)tagForItemAtIndex:(NSInteger)index;
 
-/*insert, delete（hide, move*/
+/*insert, delete（hide, move)*/
 - (void)insertItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
 - (void)deleteItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
 - (void)moveItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^) ())complete;

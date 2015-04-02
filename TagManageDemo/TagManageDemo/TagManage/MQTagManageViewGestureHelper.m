@@ -176,7 +176,7 @@
 
 - (void)exchangeIfNeeded {
     NSInteger toIndex = [_tagManageView indexOfItemAtPoint:CGPointMake(_mTempMoveTag.center.x, _mTempMoveTag.center.y)];
-    if (toIndex < 0) {
+    if (toIndex == NSNotFound) {
         return;
     }
     CGRect toTagRect = [_tagManageView rectOfItemAtIndex:toIndex];
