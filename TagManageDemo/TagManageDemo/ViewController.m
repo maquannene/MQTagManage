@@ -11,6 +11,8 @@
 #import "MQTagManageView+Gesture.h"
 #import "MQTagManageViewGestureHelper.h"
 
+static BOOL kDifferentWidth = 1;
+
 static NSInteger maxCount = 40;
 
 @interface ViewController ()
@@ -70,7 +72,12 @@ MQTagManageViewGestureHelperDelegate
     for (int i = 0; i < total; i++) {
         @autoreleasepool {
             [self.dataArray addObject:[NSString stringWithFormat:@" Tag %d ", i]];
-            [self.widthArray addObject:@(arc4random() % 85 + 85)];
+            if (kDifferentWidth) {
+                [self.widthArray addObject:@(arc4random() % 85 + 85)];
+            }
+            else {
+                [self.widthArray addObject:@(135)];
+            }
         }
     }
 }
@@ -88,7 +95,12 @@ MQTagManageViewGestureHelperDelegate
 - (void)tagManageAssistViewAction:(UIButton *)button {
     //  update data
     [_dataArray addObject:[NSString stringWithFormat:@" Tag %d ", _dataArray.count]];
-    [_widthArray addObject:@(arc4random() % 85 + 85)];
+    if (kDifferentWidth) {
+        [self.widthArray addObject:@(arc4random() % 85 + 85)];
+    }
+    else {
+        [self.widthArray addObject:@(135)];
+    }
     //  update interface
     [_tagManageView insertItemAtIndex:_dataArray.count - 1 complete:^{
         _activeIndex = _dataArray.count - 1;
