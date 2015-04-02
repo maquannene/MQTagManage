@@ -11,7 +11,7 @@
 #import "MQTagManageView+Gesture.h"
 #import "MQTagManageViewGestureHelper.h"
 
-static BOOL kDifferentWidth = 1;
+static BOOL kDifferentWidth = 0;
 
 static NSInteger maxCount = 40;
 
