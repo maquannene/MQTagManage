@@ -12,6 +12,7 @@
 @interface MQTagManageViewGestureHelper()<UIGestureRecognizerDelegate>
 
 {
+  @private
     MQTagManageView *_tagManageView;
     UIView *_longPressTag;                               //  记录长按的tag
     NSInteger _moveFromIndex;
@@ -20,7 +21,7 @@
 }
 
 @property (retain, nonatomic) UIImageView *mTempMoveTag;
-@property (retain, nonatomic) NSTimer *autoMoveTimeer;
+@property (retain, nonatomic) NSTimer *autoMoveTimer;
 @property (assign, nonatomic) MQTagManageAutoScrollDir autoScrollDir;
 
 @end
@@ -30,8 +31,8 @@
 - (void)dealloc {
     [_mTempMoveTag release];
     _mTempMoveTag = nil;
-    [_autoMoveTimeer release];
-    _autoMoveTimeer = nil;
+    [_autoMoveTimer release];
+    _autoMoveTimer = nil;
     [_tapGesture release];
     _tapGesture = nil;
     [super dealloc];
@@ -211,16 +212,17 @@
 }
 
 - (void)startAutoScrollTimer {
-    self.autoMoveTimeer = [NSTimer scheduledTimerWithTimeInterval:.003
+    self.autoMoveTimer = [NSTimer scheduledTimerWithTimeInterval:.003
                                                            target:self
                                                          selector:@selector(autoScroll)
                                                          userInfo:nil
                                                           repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.autoMoveTimer forMode:NSRunLoopCommonModes];
 }
 
 - (void)stopAutoScrollTimer {
-    if ([_autoMoveTimeer isValid]) {
-        [_autoMoveTimeer invalidate];
+    if ([_autoMoveTimer isValid]) {
+        [_autoMoveTimer invalidate];
     }
 }
 

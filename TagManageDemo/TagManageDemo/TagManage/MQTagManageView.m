@@ -10,9 +10,12 @@
 
 @interface MQTagManageView()
 
-@property (nonatomic, retain) NSMutableArray *tagItemsArray;
-@property (nonatomic, assign) NSInteger selectedItemIndex;
-@property (assign, nonatomic) BOOL isAnimating;
+{
+  @private
+    BOOL _isAnimating;
+    NSInteger _selectedItemIndex;
+    NSMutableArray *_tagItemsArray;
+}
 
 @end
 
@@ -142,7 +145,7 @@
         }
     }
     // adjust contentSize
-    UIView * lastTagItem = self.tagItemsArray.lastObject;
+    UIView * lastTagItem = _tagItemsArray.lastObject;
     self.contentSize = CGSizeMake(CGRectGetMaxX(lastTagItem.frame) + CGRectGetWidth(self.assistView.frame),
                                   CGRectGetHeight(self.frame));
     

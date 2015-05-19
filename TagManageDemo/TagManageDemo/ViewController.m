@@ -109,6 +109,7 @@ MQTagManageViewGestureHelperDelegate
 
 //  delete
 - (IBAction)deleteAction:(id)sender {
+    ((UIButton *)sender).userInteractionEnabled = NO;
     //  update data
     [_dataArray removeObjectAtIndex:_activeIndex];
     [_widthArray removeObjectAtIndex:_activeIndex];
@@ -117,6 +118,7 @@ MQTagManageViewGestureHelperDelegate
         if (_activeIndex >= _dataArray.count) {
             _activeIndex = _dataArray.count - 1;
         }
+        ((UIButton *)sender).userInteractionEnabled = YES;
     }];
 }
 
