@@ -8,26 +8,22 @@ import the file folder "TagManageView", and implement some datasource.
 #Intro
 This widget main contain two parts: [view] and [gestureHelper]
 #####1.TagManageView:
-Provide the view base behavior, main AIP and datasource:
+Provide the view base behavior API :
 ```objc
-//API
+
 - (void)reloadTagItems;
+- (void)autoAdjustZCoordinate;
+- (id)dequeueReusableTag:(NSInteger)index;
 
-// insert a tag at index
+- (CGRect)rectOfItemAtIndex:(NSInteger)index;
+- (NSInteger)indexOfItemAtPoint:(CGPoint)point;
+- (UIView *)tagForItemAtPoint:(CGPoint)point;
+- (UIView *)tagForItemAtIndex:(NSInteger)index;
+
+/*insert, delete（hide, move)*/
 - (void)insertItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
-
-// delete a tag at index
 - (void)deleteItemAtIndex:(NSInteger)index complete:(void (^) ())complete;
-
-// move a tag from fromIndex to toIndex * need call reloadTagItems: on completeBlock
 - (void)moveItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^) ())complete;
-
-//DataSource
-- (NSInteger)activeItemIndex:(TagManageView *)tagManageView;
-
-- (NSInteger)numberOfItems:(TagManageView *)tagManageView;
-
-- (UIView *)tagManageView:(TagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index;
 
 ```
 #####2.TagManageViewGestureHelper:
