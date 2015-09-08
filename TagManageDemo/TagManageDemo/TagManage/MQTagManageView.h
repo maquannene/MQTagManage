@@ -33,12 +33,12 @@
 
 @interface MQTagManageView : UIScrollView
 
-@property (assign, nonatomic) id<MQTagManageViewDataSource> dataSource;
-@property (assign, nonatomic) id<MQTagManageViewDelegate> delegate;
-@property (retain, nonatomic) UIView *assistView;                       //  assistView behind of last tagItem.
-@property (assign, nonatomic) NSInteger gap;                            //  gap of between tagItem. default:0
-@property (assign, nonatomic) NSInteger tagItemHeight;                  //  default:44
-@property (assign, nonatomic) NSInteger tagItemWidth;                   //  default:135
+@property (nonatomic, assign) id<MQTagManageViewDataSource> dataSource;
+@property (nonatomic, assign) id<MQTagManageViewDelegate> tagManageDelegate;
+@property (nonatomic, retain) UIView *assistView;                       //  assistView behind of last tagItem.
+@property (nonatomic, assign) NSInteger gap;                            //  gap of between tagItem. default:0
+@property (nonatomic, assign) NSInteger tagItemHeight;                  //  default:44
+@property (nonatomic, assign) NSInteger tagItemWidth;                   //  default:135
 
 - (void)reloadTagItems;
 - (void)autoAdjustZCoordinate;

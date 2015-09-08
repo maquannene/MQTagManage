@@ -57,7 +57,7 @@ MQTagManageViewGestureHelperDelegate
                                                                        44)];
     _tagManageView.gap = -25;
     _tagManageView.dataSource = self;
-    _tagManageView.delegate = self;
+    _tagManageView.tagManageDelegate = self;
     _tagManageView.supportGesture = YES;
     [self createTagManangeViewAssistView];
     [self.view addSubview:_tagManageView];
@@ -94,7 +94,7 @@ MQTagManageViewGestureHelperDelegate
 //  add
 - (void)tagManageAssistViewAction:(UIButton *)button {
     //  update data
-    [_dataArray addObject:[NSString stringWithFormat:@" Tag %d ", _dataArray.count]];
+    [_dataArray addObject:[NSString stringWithFormat:@" Tag %lu ", (unsigned long)_dataArray.count]];
     if (kDifferentWidth) {
         [self.widthArray addObject:@(arc4random() % 85 + 85)];
     }
@@ -179,11 +179,11 @@ MQTagManageViewGestureHelperDelegate
 - (void)tagManageView:(MQTagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index {
     // update data
     _activeIndex = index;
-    NSLog(@"active %d", index);
+    NSLog(@"active %ld", (long)index);
 }
 
 - (void)tagManageView:(MQTagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
-    NSLog(@"from %d to %d", fromIndex, toIndex);
+    NSLog(@"from %ld to %ld", (long)fromIndex, (long)toIndex);
 
     // update data
     NSObject *fromData = [_dataArray[fromIndex] retain];

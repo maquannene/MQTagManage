@@ -20,9 +20,9 @@
     NSInteger _currentActiveIndex;
 }
 
-@property (retain, nonatomic) UIImageView *mTempMoveTag;
-@property (retain, nonatomic) NSTimer *autoMoveTimer;
-@property (assign, nonatomic) MQTagManageAutoScrollDir autoScrollDir;
+@property (nonatomic, retain) UIImageView *mTempMoveTag;
+@property (nonatomic, retain) NSTimer *autoMoveTimer;
+@property (nonatomic, assign) MQTagManageAutoScrollDir autoScrollDir;
 
 @end
 

@@ -14,7 +14,7 @@ static char MQTagManageViewGestureHelperKey;
 
 @interface MQTagManageView ()
 
-@property (retain, nonatomic) MQTagManageViewGestureHelper *mGestureHelper;
+@property (nonatomic, retain) MQTagManageViewGestureHelper *mGestureHelper;
 
 @end
 

@@ -12,6 +12,6 @@
 
 @interface MQTagManageView (Gesture)
 
-@property (assign, nonatomic) BOOL supportGesture;
+@property (nonatomic, assign) BOOL supportGesture;
 
 @end

@@ -28,9 +28,9 @@ typedef NS_ENUM(NSUInteger, MQTagManageAutoScrollDir) {
 
 @interface MQTagManageViewGestureHelper : NSObject
 
-@property (assign, nonatomic) BOOL helperEnable;                                            //  default:NO
-@property (retain, nonatomic, readonly) UITapGestureRecognizer *tapGesture;
-@property (retain, nonatomic, readonly) UILongPressGestureRecognizer *longPressGesture;
+@property (nonatomic, assign) BOOL helperEnable;                                            //  default:NO
+@property (nonatomic, retain, readonly) UITapGestureRecognizer *tapGesture;
+@property (nonatomic, retain, readonly) UILongPressGestureRecognizer *longPressGesture;
 
 - (instancetype)initWithTagManageView:(MQTagManageView *)tagManageView;
 
