@@ -222,35 +222,38 @@
 - (void)moveItemAtIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex complete:(void (^)())complete {
     //  this time, tagItemsArray is old dataSource
     UIView *fromTagItem = _tagItemsArray[fromIndex];
-    CGRect toRect = CGRectMake([self getTagItemOriginX:toIndex],
-                               0,
-                               CGRectGetWidth(fromTagItem.frame),
-                               CGRectGetHeight(fromTagItem.frame));
-    
     [UIView animateWithDuration:0.5 animations:^() {
         _isAnimating = YES;
-        fromTagItem.frame = toRect;
-        
         //  move back , the origin.x of tagItem which > from and <= to move forward fromTagItem.frame.size.width
         if (fromIndex < toIndex) {
             for (NSInteger index = fromIndex + 1; index <= toIndex ; index++) {
                 UIView *tagItem = _tagItemsArray[index];
-                tagItem.frame = CGRectMake(tagItem.frame.origin.x - fromTagItem.frame.size.width - self.gap,
-                                           tagItem.frame.origin.y,
-                                           tagItem.frame.size.width,
-                                           tagItem.frame.size.height);
+                tagItem.frame = CGRectMake(CGRectGetMinX(tagItem.frame) - CGRectGetWidth(fromTagItem.frame) - self.gap,
+                                           CGRectGetMinY(tagItem.frame),
+                                           CGRectGetWidth(tagItem.frame),
+                                           CGRectGetHeight(tagItem.frame));
             }
+            //  adjust fromTagItem frame
+            fromTagItem.frame = CGRectMake(CGRectGetMaxX(((UIView *)_tagItemsArray[toIndex]).frame) + self.gap,
+                                           CGRectGetMinY(fromTagItem.frame),
+                                           CGRectGetWidth(fromTagItem.frame),
+                                           CGRectGetHeight(fromTagItem.frame));
         }
         
         //  move forward , the origin.x of tagItem which >= to and < from move back fromTagItem.frame.size.width
         if (fromIndex > toIndex) {
             for (NSInteger index = fromIndex - 1; index >= toIndex; index--) {
                 UIView *tagItem = _tagItemsArray[index];
-                tagItem.frame = CGRectMake(tagItem.frame.origin.x + fromTagItem.frame.size.width + self.gap,
-                                           tagItem.frame.origin.y,
-                                           tagItem.frame.size.width,
-                                           tagItem.frame.size.height);
+                tagItem.frame = CGRectMake(CGRectGetMinX(tagItem.frame) + CGRectGetWidth(fromTagItem.frame) + self.gap,
+                                           CGRectGetMinY(tagItem.frame),
+                                           CGRectGetWidth(tagItem.frame),
+                                           CGRectGetHeight(tagItem.frame));
             }
+            //  adjust fromTagItem frame
+            fromTagItem.frame = CGRectMake(CGRectGetMinX(((UIView *)_tagItemsArray[toIndex]).frame) - self.gap - CGRectGetWidth(fromTagItem.frame),
+                                           CGRectGetMinY(fromTagItem.frame),
+                                           CGRectGetWidth(fromTagItem.frame),
+                                           CGRectGetHeight(fromTagItem.frame));
         }
         
         UIView *_fromTagItem = [_tagItemsArray[fromIndex] retain];
@@ -292,10 +295,10 @@
         [_tagItemsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop){
             UIView *tagItem = (UIView *)obj;
             if (i >= index) {
-                tagItem.frame = CGRectMake(CGRectGetMinX(tagItem.frame) + insertTagItem.frame.size.width + self.gap,
-                                           0,
-                                           tagItem.frame.size.width,
-                                           tagItem.frame.size.height);
+                tagItem.frame = CGRectMake(CGRectGetMinX(tagItem.frame) + CGRectGetWidth(insertTagItem.frame) + self.gap,
+                                           CGRectGetMinY(tagItem.frame),
+                                           CGRectGetWidth(tagItem.frame),
+                                           CGRectGetHeight(tagItem.frame));
             }
         }];
         
@@ -354,9 +357,9 @@
             UIView *tagItem = (UIView *)obj;
             if (i > index) {
                 tagItem.frame = CGRectMake(CGRectGetMinX(tagItem.frame) - deleteTagItem.frame.size.width - self.gap,
-                                           0,
-                                           tagItem.frame.size.width,
-                                           tagItem.frame.size.height);
+                                           CGRectGetMinY(tagItem.frame),
+                                           CGRectGetWidth(tagItem.frame),
+                                           CGRectGetHeight(tagItem.frame));
             }
         }];
         
@@ -364,7 +367,6 @@
         //  这时设置的位置，是数据源已经删除item后，前移add的位置
         //  所以只要计算最后一个item的 x 加上 宽度即可
         if (self.assistView) {
-            
             if (index != [self.dataSource numberOfItems:self]) {
                 _assistView.frame = CGRectMake(CGRectGetMaxX(lastTagItem.frame),
                                                0,

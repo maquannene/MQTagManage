@@ -11,7 +11,7 @@
 #import "MQTagManageView+Gesture.h"
 #import "MQTagManageViewGestureHelper.h"
 
-static BOOL kDifferentWidth = 0;
+static BOOL kDifferentWidth = 1;
 
 static NSInteger maxCount = 40;
 
@@ -55,7 +55,7 @@ MQTagManageViewGestureHelperDelegate
                                                                        20,
                                                                        CGRectGetWidth(self.view.frame) - 44 * 4,
                                                                        44)];
-    _tagManageView.gap = -25;
+    _tagManageView.gap = 0;
     _tagManageView.dataSource = self;
     _tagManageView.tagManageDelegate = self;
     _tagManageView.supportGesture = YES;
@@ -65,7 +65,7 @@ MQTagManageViewGestureHelperDelegate
 
 - (void)createData {
     //  data
-    NSInteger total = arc4random() % maxCount;
+    NSInteger total = arc4random() % maxCount + 10;
     _activeIndex = arc4random() % total;
     self.dataArray = [[[NSMutableArray alloc] init] autorelease];
     self.widthArray = [[[NSMutableArray alloc] init] autorelease];
@@ -150,28 +150,32 @@ MQTagManageViewGestureHelperDelegate
 }
 
 - (UIView *)tagManageView:(MQTagManageView *)tagManageView tagForItemAtIndex:(NSInteger)index {
-    UIImageView *imageView = [tagManageView dequeueReusableTag:index];
-    if (!imageView) {
-        imageView = [[[UIImageView alloc] init] autorelease];
-        UILabel *tagItem = [[[UILabel alloc] initWithFrame:imageView.bounds] autorelease];
+    UIView *view = [tagManageView dequeueReusableTag:index];
+    if (!view) {
+        view = [[[UIView alloc] init] autorelease];
+        UILabel *tagItem = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
         tagItem.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         tagItem.backgroundColor = [UIColor clearColor];
         tagItem.textAlignment = NSTextAlignmentCenter;
         tagItem.tag = 999;
-        [imageView addSubview:tagItem];
-    }
-    imageView.backgroundColor = [UIColor clearColor];
-    if (index == _activeIndex) {
-        [imageView setImage:[UIImage imageNamed:@"tag_selected.png"]];
-    }
-    else {
-        [imageView setImage:[UIImage imageNamed:@"tag_unselected.png"]];
+        [view addSubview:tagItem];
     }
     
-    UILabel *tagItem = (UILabel *)[imageView viewWithTag:999];
+    view.layer.borderWidth = 1;
+    view.layer.cornerRadius = 10;
+    if (index == _activeIndex) {
+        view.backgroundColor = [UIColor whiteColor];
+        view.layer.borderColor = [UIColor colorWithRed:70/255.0 green:179/255.0 blue:114/255.0 alpha:1].CGColor;
+    }
+    else {
+        view.backgroundColor = [UIColor colorWithRed:70/255.0 green:179/255.0 blue:114/255.0 alpha:1];
+        view.layer.borderColor = [UIColor whiteColor].CGColor;
+    }
+    
+    UILabel *tagItem = (UILabel *)[view viewWithTag:999];
     NSString *text = [NSString stringWithFormat:@"%@", _dataArray[index]];
     tagItem.text = text;
-    return imageView;
+    return view;
 }
 
 #pragma mark -
@@ -182,10 +186,8 @@ MQTagManageViewGestureHelperDelegate
     NSLog(@"active %ld", (long)index);
 }
 
-- (void)tagManageView:(MQTagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
-    NSLog(@"from %ld to %ld", (long)fromIndex, (long)toIndex);
-
-    // update data
+- (void)tagManageView:(MQTagManageView *)tagManageView willMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
+    // update dataSource
     NSObject *fromData = [_dataArray[fromIndex] retain];
     [_dataArray removeObjectAtIndex:fromIndex];
     [_dataArray insertObject:fromData atIndex:toIndex];
@@ -196,6 +198,10 @@ MQTagManageViewGestureHelperDelegate
     [_widthArray removeObjectAtIndex:fromIndex];
     [_widthArray insertObject:fromWidthNumber atIndex:toIndex];
     [fromWidthNumber release];
+}
+
+- (void)tagManageView:(MQTagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
+    //  Finish move
 }
 
 @end

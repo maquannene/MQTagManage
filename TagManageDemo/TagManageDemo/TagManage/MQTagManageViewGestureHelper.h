@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, MQTagManageAutoScrollDir) {
 
 @optional
 - (void)tagManageView:(MQTagManageView *)tagManageView didSelectTagItemAtIndex:(NSInteger)index;
+- (void)tagManageView:(MQTagManageView *)tagManageView willMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 - (void)tagManageView:(MQTagManageView *)tagManageView didMoveItemFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 
 @end

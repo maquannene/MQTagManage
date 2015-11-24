@@ -25,6 +25,7 @@ static char MQTagManageViewGestureHelperKey;
     if (!gestureHelper) {
         gestureHelper = [[MQTagManageViewGestureHelper alloc] initWithTagManageView:self];
         objc_setAssociatedObject(self, &MQTagManageViewGestureHelperKey, gestureHelper, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [gestureHelper release];
     }
     return gestureHelper;
 }

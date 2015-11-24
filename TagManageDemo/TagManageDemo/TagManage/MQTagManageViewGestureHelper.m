@@ -14,10 +14,9 @@
 {
   @private
     MQTagManageView *_tagManageView;
-    UIView *_longPressTag;                               //  记录长按的tag
-    NSInteger _moveFromIndex;
-    NSInteger _currentLongPressIndex;
-    NSInteger _currentActiveIndex;
+    UIView *_longPressTag;                              //  记录长按的tag
+    NSInteger _moveFromIndex;                           //  记录长按起始点
+    NSInteger _currentLongPressIndex;                   //  记录长按当前位置
 }
 
 @property (nonatomic, retain) UIImageView *mTempMoveTag;
@@ -83,11 +82,11 @@
 #pragma mark -
 #pragma mark - GestureAction
 - (void)tagManageViewTap:(UITapGestureRecognizer *)gesture  {
-    if ([_tagManageView.delegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
-        if ([_tagManageView.delegate respondsToSelector:@selector(tagManageView:didSelectTagItemAtIndex:)]) {
+    if ([_tagManageView.tagManageDelegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
+        if ([_tagManageView.tagManageDelegate respondsToSelector:@selector(tagManageView:didSelectTagItemAtIndex:)]) {
             NSInteger tapIndex = [_tagManageView indexOfItemAtPoint:[gesture locationInView:_tagManageView]];
             if (tapIndex >= 0) {
-                [(id<MQTagManageViewGestureHelperDelegate>)_tagManageView.delegate tagManageView:_tagManageView didSelectTagItemAtIndex:tapIndex];
+                [(id<MQTagManageViewGestureHelperDelegate>)_tagManageView.tagManageDelegate tagManageView:_tagManageView didSelectTagItemAtIndex:tapIndex];
                 [_tagManageView reloadTagItems];
             }
         }
@@ -155,20 +154,28 @@
             return;
         }
         
+        //  willMove delegate: need update dataSource.
+        if ([_tagManageView.tagManageDelegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
+            if ([_tagManageView.tagManageDelegate respondsToSelector:@selector(tagManageView:willMoveItemFromIndex:toIndex:)]) {
+                [(id<MQTagManageViewGestureHelperDelegate>)_tagManageView.tagManageDelegate tagManageView:_tagManageView willMoveItemFromIndex:_moveFromIndex toIndex:_currentLongPressIndex];
+            }
+        }
+        
         [UIView animateWithDuration:.4 animations:^{
             _mTempMoveTag.frame = _longPressTag.frame;
         } completion:^(BOOL finished) {
             _longPressTag.hidden = NO;
             [_mTempMoveTag removeFromSuperview];
             
-            //  didMove delegate
-            if ([_tagManageView.delegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
-                if ([_tagManageView.delegate respondsToSelector:@selector(tagManageView:didMoveItemFromIndex:toIndex:)]) {
-                    [(id<MQTagManageViewGestureHelperDelegate>)_tagManageView.delegate tagManageView:_tagManageView didMoveItemFromIndex:_moveFromIndex toIndex:_currentLongPressIndex];
-                }
-            }
             if (_moveFromIndex != _currentLongPressIndex) {
                 [_tagManageView reloadTagItems];
+            }
+            
+            //  didMove delegate
+            if ([_tagManageView.tagManageDelegate conformsToProtocol:@protocol(MQTagManageViewGestureHelperDelegate)]) {
+                if ([_tagManageView.tagManageDelegate respondsToSelector:@selector(tagManageView:didMoveItemFromIndex:toIndex:)]) {
+                    [(id<MQTagManageViewGestureHelperDelegate>)_tagManageView.tagManageDelegate tagManageView:_tagManageView didMoveItemFromIndex:_moveFromIndex toIndex:_currentLongPressIndex];
+                }
             }
         }];
         self.autoScrollDir = MQTagManageAutoScrollStop;
@@ -189,13 +196,8 @@
         toIndex ++;
     }
     
-    if (_currentLongPressIndex == _currentActiveIndex) {
-        _currentActiveIndex = toIndex;
-    }
-    else {
-        if (toIndex == _currentActiveIndex) {
-            _currentActiveIndex = _currentLongPressIndex;
-        }
+    if (_currentLongPressIndex == toIndex) {
+        return;
     }
     
     [_tagManageView moveItemAtIndex:_currentLongPressIndex toIndex:toIndex complete:nil];
