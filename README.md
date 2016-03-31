@@ -4,6 +4,8 @@ TagManage
 An easy to use TagManageView and usagea bit like as UITableView.
 import the file folder "TagManageView", and implement some datasource.
 
+<p align="center"><img src="https://github.com/wuhanness/TagManage/blob/master/tagManageDemoShow.gif" width="570" height="61"/></p>
+
 #Intro
 This widget main contain two parts: [view] and [gestureHelper]
 #####1.TagManageView:
